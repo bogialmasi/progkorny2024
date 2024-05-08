@@ -12,6 +12,8 @@ public interface EventServiceInterface {
     List<Event> getAllEvent();
     Event getEventById(int id);
     Event getEventByEventType(int id);
+    Event getEventByLocation(String location);
+    Event getEventByDescription(String description);
     Event getEventByUserId(int id);
     Event getEventByTime(LocalTime time);
     Event getEventByDate(LocalTime date);
