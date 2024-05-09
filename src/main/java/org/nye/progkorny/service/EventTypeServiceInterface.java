@@ -8,6 +8,6 @@ public interface EventTypeServiceInterface {
 // C
     // R
     List<EventType> getAllEventType();
-    EventType getEventType(int id);//???????
     EventType getEventTypeByName(String name);
+    EventType getEventTypeById(int id);
 }

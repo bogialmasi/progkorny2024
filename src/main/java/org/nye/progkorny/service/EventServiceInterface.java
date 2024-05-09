@@ -11,12 +11,11 @@ public interface EventServiceInterface {
     // R
     List<Event> getAllEvent();
     Event getEventById(int id);
-    Event getEventByEventType(int id);
+    Event getEventByEventTypeId(int id);
     Event getEventByLocation(String location);
-    Event getEventByDescription(String description);
+    Event getEventByName(String name);
     Event getEventByUserId(int id);
-    Event getEventByTime(LocalTime time);
-    Event getEventByDate(LocalTime date);
+    Event getEventByDateTime(int datetime);
     // U
     boolean updateEvent(Event event);
     // D
