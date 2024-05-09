@@ -1,24 +1,72 @@
 package org.nye.progkorny.controller;
 
-import org.nye.progkorny.service.impl.EventService;
+import org.nye.progkorny.model.Event;
+import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.service.impl.EventTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/eventtype")
 public class EventTypeController {
-    // NE LEGYEN BENNE POST ÉS DELETE!
 
         @Autowired
-        private EventTypeService eventTypeServiceService;
+        private EventTypeService eventTypeService;
 
-    public EventTypeController(EventTypeService eventTypeServiceService) {
-        this.eventTypeServiceService = eventTypeServiceService;
+    public EventTypeController(EventTypeService eventTypeService) {
+        this.eventTypeService = eventTypeService;
     }
 
-    /*    MAPPING    */
+    // C
+    @PostMapping(path = "/")
+    public ResponseEntity<Void> InsertEventType(@RequestBody EventType eventType) {
+        boolean result = eventTypeService.addEventType(eventType);
+        if (result) {
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
+    }
 
+    // R
+
+    @GetMapping(path = "/")
+    public List<EventType> getAllEventType(){
+        return eventTypeService.getAllEventType();
+    }
+
+    @GetMapping(path = "/{id}")
+    public EventType getEventTypeById(@PathVariable int id){
+        return eventTypeService.getEventTypeById(id);
+    }
+
+    @GetMapping(path = "/name", params = "name")
+    public EventType getEventTypeByName(@RequestParam("name") String name){
+        return eventTypeService.getEventTypeByName(name);
+    }
+
+    // U
+    @PutMapping(path = "/", params = "id")
+    public ResponseEntity<Void> updateEventType(@RequestBody EventType newEventType, @RequestParam int id){
+        EventType eventType = eventTypeService.getEventTypeById(id);
+        eventType.setName(newEventType.getName());
+        if(eventTypeService.updateEventType(eventType)){
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
+    }
+
+    // D
+    @DeleteMapping(path = "/", params = "id")
+    public ResponseEntity<Void> deleteEventType(@RequestParam("id") int id){
+        boolean result = eventTypeService.deleteEventType(id);
+        if (result) {
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
+    }
 
 }
