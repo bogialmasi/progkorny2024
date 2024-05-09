@@ -8,10 +8,6 @@ import java.util.List;
 
 @Repository
 public class UserRepository implements UserRepositoryInterface {
-    @Override
-    public List<User> getUser() {
-        return null;
-    }
 
     @Override
     public User getUserById(int id) {
@@ -35,6 +31,11 @@ public class UserRepository implements UserRepositoryInterface {
 
     @Override
     public User insertUser(User user) {
+        return null;
+    }
+
+    @Override
+    public List<User> getAllUser() {
         return null;
     }
 }

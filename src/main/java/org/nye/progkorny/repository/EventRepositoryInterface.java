@@ -7,12 +7,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface EventRepositoryInterface {
-    List<Event> getEvent();
+    List<Event> getAllEvent();
     Event getEventById(int id);
-    Event getEventByDescripton(String description);
+    Event getEventByName(String name);
     Event getEventByLocation(String location);
-    Event getEventByDate(LocalDate date);
-    Event getEventByTime(LocalTime time);
+    Event getEventByDateTime(int datetime);
     Event getEventByUserId(int id);
 
     Event deleteEvent(int id);

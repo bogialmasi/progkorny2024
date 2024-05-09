@@ -4,14 +4,12 @@ import org.nye.progkorny.model.Event;
 import org.nye.progkorny.repository.EventRepositoryInterface;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Repository
 public class EventRepository implements EventRepositoryInterface {
     @Override
-    public List<Event> getEvent() {
+    public List<Event> getAllEvent() {
         return null;
     }
 
@@ -21,7 +19,7 @@ public class EventRepository implements EventRepositoryInterface {
     }
 
     @Override
-    public Event getEventByDescripton(String description) {
+    public Event getEventByName(String name) {
         return null;
     }
 
@@ -31,12 +29,7 @@ public class EventRepository implements EventRepositoryInterface {
     }
 
     @Override
-    public Event getEventByDate(LocalDate date) {
-        return null;
-    }
-
-    @Override
-    public Event getEventByTime(LocalTime time) {
+    public Event getEventByDateTime(int datetime) {
         return null;
     }
 
