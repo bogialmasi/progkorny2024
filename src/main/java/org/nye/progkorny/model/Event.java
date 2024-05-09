@@ -22,7 +22,7 @@ public class Event {
     @NotNull
     private Timestamp datetime;
     private String location;
-    private EventType eventType;
-    private String description;
+    private int eventTypeId;
+    private String name;
     private int userId;
 }
