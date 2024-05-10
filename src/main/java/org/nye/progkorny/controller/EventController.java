@@ -33,43 +33,43 @@ public class EventController {
     // R
 
     @GetMapping(path = "/")
-    public List<Event> getAllEvent(){
+    public List<Event> getAllEvent() throws SQLException {
         return eventService.getAllEvent();
     }
 
     @GetMapping(path = "/{id}")
-    public Event getEventById(@PathVariable int id){
+    public Event getEventById(@PathVariable int id) throws SQLException {
         return eventService.getEventById(id);
     }
 
     @GetMapping(path = "/user", params = "userId")
-    public Event getEventByUserId(@RequestParam("userId") int userId){
+    public List<Event> getEventByUserId(@RequestParam("userId") int userId) throws SQLException {
         return eventService.getEventByUserId(userId);
     }
 
     @GetMapping(path = "/eventtype", params = "eventTypeId")
-    public Event getEventByEventTypeId(@RequestParam("eventTypeId") int eventTypeId){
+    public List<Event> getEventByEventTypeId(@RequestParam("eventTypeId") int eventTypeId){
         return eventService.getEventByEventTypeId(eventTypeId);
     }
 
     @GetMapping(path = "/name", params = "name")
-    public Event getEventByName(@RequestParam("name") String name){
+    public Event getEventByName(@RequestParam("name") String name) throws SQLException {
         return eventService.getEventByName(name);
     }
 
     @GetMapping(path = "/location", params = "location")
-    public Event getEventByLocation(@RequestParam("location") String location){
+    public Event getEventByLocation(@RequestParam("location") String location) throws SQLException {
         return eventService.getEventByLocation(location);
     }
 
     @GetMapping(path = "/datetime", params = "datetime")
-    public Event getEventByDateTime(@RequestParam("datetime") int datetime){
+    public Event getEventByDateTime(@RequestParam("datetime") int datetime) throws SQLException {
         return eventService.getEventByDateTime(datetime);
     }
 
     // U
     @PutMapping(path = "/", params = "id")
-    public ResponseEntity<Void> updateEvent(@RequestBody Event newEvent, @RequestParam int id){
+    public ResponseEntity<Void> updateEvent(@RequestBody Event newEvent, @RequestParam int id) throws SQLException {
         Event event = eventService.getEventById(id);
         event.setDatetime(newEvent.getDatetime());
         event.setLocation(newEvent.getLocation());

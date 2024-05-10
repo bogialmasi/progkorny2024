@@ -7,6 +7,7 @@ import org.nye.progkorny.service.EventTypeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -20,12 +21,12 @@ public class EventTypeService implements EventTypeServiceInterface {
     }
 
     @Override
-    public List<EventType> getAllEventType() {
+    public List<EventType> getAllEventType() throws SQLException {
         return eventTypeRepository.getAllEventType();
     }
 
     @Override
-    public EventType getEventTypeByName(String name) {
+    public EventType getEventTypeByName(String name) throws SQLException {
         return eventTypeRepository.getEventTypeByName(name);
     }
 
@@ -33,7 +34,7 @@ public class EventTypeService implements EventTypeServiceInterface {
         return eventTypeRepository.insertEventType(eventType);
     }
 
-    public EventType getEventTypeById(int id) {
+    public EventType getEventTypeById(int id) throws SQLException {
         return eventTypeRepository.getEventTypeById(id);
     }
 

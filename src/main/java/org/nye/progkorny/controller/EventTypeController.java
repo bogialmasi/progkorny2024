@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -34,23 +35,23 @@ public class EventTypeController {
     // R
 
     @GetMapping(path = "/")
-    public List<EventType> getAllEventType(){
+    public List<EventType> getAllEventType() throws SQLException {
         return eventTypeService.getAllEventType();
     }
 
     @GetMapping(path = "/{id}")
-    public EventType getEventTypeById(@PathVariable int id){
+    public EventType getEventTypeById(@PathVariable int id) throws SQLException {
         return eventTypeService.getEventTypeById(id);
     }
 
     @GetMapping(path = "/name", params = "name")
-    public EventType getEventTypeByName(@RequestParam("name") String name){
+    public EventType getEventTypeByName(@RequestParam("name") String name) throws SQLException {
         return eventTypeService.getEventTypeByName(name);
     }
 
     // U
     @PutMapping(path = "/", params = "id")
-    public ResponseEntity<Void> updateEventType(@RequestBody EventType newEventType, @RequestParam int id){
+    public ResponseEntity<Void> updateEventType(@RequestBody EventType newEventType, @RequestParam int id) throws SQLException {
         EventType eventType = eventTypeService.getEventTypeById(id);
         eventType.setName(newEventType.getName());
         if(eventTypeService.updateEventType(eventType)){

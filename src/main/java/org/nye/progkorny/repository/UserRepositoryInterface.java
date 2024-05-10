@@ -2,15 +2,16 @@ package org.nye.progkorny.repository;
 
 import org.nye.progkorny.model.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserRepositoryInterface {
-    User getUserById(int id);
-    User getUserByName(String name);
+    User getUserById(int id) throws SQLException;
+    User getUserByName(String name) throws SQLException;
 
-    User deleteUser(int id);
-    User updateUser(User user);
-    User insertUser(User user);
+    boolean deleteUser(int id);
+    boolean updateUser(User user);
+    boolean insertUser(User user);
 
-    List<User> getAllUser();
+    List<User> getAllUser() throws SQLException;
 }

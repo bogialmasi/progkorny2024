@@ -6,6 +6,7 @@ import org.nye.progkorny.service.EventServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -25,42 +26,42 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public List<Event> getAllEvent() {
+    public List<Event> getAllEvent() throws SQLException {
         return eventRepository.getAllEvent();
     }
 
     @Override
-    public Event getEventById(int id) {
+    public Event getEventById(int id) throws SQLException {
 
         return eventRepository.getEventById(id);
     }
 
     @Override
-    public Event getEventByEventTypeId(int id) {
+    public List<Event> getEventByEventTypeId(int id) {
 
         return getEventByEventTypeId(id);
     }
 
     @Override
-    public Event getEventByLocation(String location) {
+    public Event getEventByLocation(String location) throws SQLException {
 
         return eventRepository.getEventByLocation(location);
     }
 
     @Override
-    public Event getEventByName(String name) {
+    public Event getEventByName(String name) throws SQLException {
 
         return eventRepository.getEventByName(name);
     }
 
     @Override
-    public Event getEventByUserId(int id) {
+    public List<Event> getEventByUserId(int id) throws SQLException {
 
         return eventRepository.getEventByUserId(id);
     }
 
     @Override
-    public Event getEventByDateTime(int datetime) {
+    public Event getEventByDateTime(int datetime) throws SQLException {
         return eventRepository.getEventByDateTime(datetime);
     }
 
