@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -32,24 +33,24 @@ public class UserController {
     // R
 
     @GetMapping(path = "/")
-    public List<User> getAllUser() {
+    public List<User> getAllUser() throws SQLException {
         return userService.getAllUser();
     }
 
     @GetMapping(path = "/{id}")
-    public User getUserById(@PathVariable int id) {
+    public User getUserById(@PathVariable int id) throws SQLException {
         return userService.getUserById(id);
     }
 
     @GetMapping(path = "/name", params = "name")
-    public User getUserByName(@RequestParam String name) {
+    public User getUserByName(@RequestParam String name) throws SQLException {
         return userService.getUserByName(name);
     }
 
     // U
 
     @PutMapping(path = "/", params = "id")
-    public ResponseEntity<Void> updateUser(@RequestBody User newUser, @RequestParam int id){
+    public ResponseEntity<Void> updateUser(@RequestBody User newUser, @RequestParam int id) throws SQLException {
         User user = userService.getUserById(id);
         user.setName(newUser.getName());
         if(userService.updateUser(user)){

@@ -6,6 +6,7 @@ import org.nye.progkorny.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -24,17 +25,17 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<User> getAllUser() {
+    public List<User> getAllUser() throws SQLException {
         return userRepository.getAllUser();
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(int id) throws SQLException {
         return userRepository.getUserById(id);
     }
 
     @Override
-    public User getUserByName(String name) {
+    public User getUserByName(String name) throws SQLException {
         return userRepository.getUserByName(name);
     }
 
