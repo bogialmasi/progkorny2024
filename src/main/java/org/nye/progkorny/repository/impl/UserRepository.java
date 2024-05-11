@@ -18,7 +18,7 @@ public class UserRepository extends GenericDataAccess<User> implements UserRepos
     @Override
     public boolean insertUser(User user) {
         int rowsAffected = upsert("INSERT INTO user " +
-                "(name) VALUES" + user.getName()+ ";");
+                "(name) VALUES ('" + user.getName()+ "');");
         return rowsAffected == 1;
     }
 
@@ -46,7 +46,7 @@ public class UserRepository extends GenericDataAccess<User> implements UserRepos
 
     @Override
     public boolean updateUser(User user) {
-        int rowsAffected = upsert("UPDATE user SET name = " + user.getName() + ";");
+        int rowsAffected = upsert("UPDATE user SET name = '" + user.getName() + "' WHERE id = " + user.getId()+ " ;");
         return rowsAffected == 1;
     }
 

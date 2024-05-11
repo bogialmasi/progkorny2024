@@ -17,10 +17,9 @@ public class EventRepository extends GenericDataAccess<Event> implements EventRe
 
     @Override
     public boolean insertEvent(Event event) {
-        int rowsAffected = upsert("INSERT INTO event " +
-                "(datetime, location, eventTypeId, name, userId) VALUES" +
-                event.getDatetime() + event.getLocation() + event.getEventTypeId() +
-                event.getName() + event.getUserId() + ";");
+        int rowsAffected = upsert("INSERT INTO event (datetime, location, eventtypeid, name, userid) VALUES('" +
+                event.getDatetime() +"', '" + event.getLocation() +"', '" + event.getEventTypeId() + "', '" +
+                event.getName() +"', '" + event.getUserId() + "');");
         return rowsAffected == 1;
     }
 
@@ -40,31 +39,31 @@ public class EventRepository extends GenericDataAccess<Event> implements EventRe
 
     @Override
     public Event getEventByName(String name) throws SQLException {
-        String sqlQuery = String.format("SELECT * FROM event where name = '%s';", name);
+        String sqlQuery = String.format("SELECT * FROM event WHERE name = '%s';", name);
         return query(sqlQuery).get(0);
     }
 
     @Override
     public Event getEventByLocation(String location) throws SQLException {
-        String sqlQuery = String.format("SELECT * FROM event where location = '%s';", location);
+        String sqlQuery = String.format("SELECT * FROM event WHERE location = '%s';", location);
         return query(sqlQuery).get(0);
     }
 
     @Override
-    public Event getEventByDateTime(int datetime) throws SQLException {
-        String sqlQuery = "SELECT * FROM event where name =" + datetime + ";";
+    public Event getEventByDateTime(Timestamp datetime) throws SQLException {
+        String sqlQuery = "SELECT * FROM event WHERE datetime = '" + datetime + "';";
         return query(sqlQuery).get(0);
     }
 
     @Override
     public List<Event> getEventByEventTypeId(int id) throws SQLException {
-        String sqlQuery = String.format("SELECT * FROM event where eventTypeId =" + id + ";");
+        String sqlQuery = String.format("SELECT * FROM event WHERE eventtypeid =" + id + ";");
         return query(sqlQuery);
     }
 
     @Override
     public List<Event> getEventByUserId(int id) throws SQLException {
-        String sqlQuery = String.format("SELECT * FROM event where userId =" + id + ";");
+        String sqlQuery = String.format("SELECT * FROM event WHERE userid =" + id + ";");
         return query(sqlQuery);
     }
 
@@ -73,12 +72,12 @@ public class EventRepository extends GenericDataAccess<Event> implements EventRe
     @Override
     public boolean updateEvent(Event event) {
         int rowsAffected = upsert("UPDATE event " +
-                "SET datetime = " + event.getDatetime() +
-                ", location = " + event.getLocation() +
-                ", eventTypeId = " + event.getEventTypeId() +
-                ", name = " + event.getName() +
-                ", userId = " + event.getUserId() +
-                "WHERE id = %d;");
+                "SET datetime = '" + event.getDatetime() +
+                "', location = '" + event.getLocation() +
+                "', eventtypeid = " + event.getEventTypeId() +
+                ", name = '" + event.getName() +
+                "', userid = " + event.getUserId() +
+                " WHERE id = " + event.getId() + ";");
         return rowsAffected == 1;
     }
 
@@ -97,11 +96,11 @@ public class EventRepository extends GenericDataAccess<Event> implements EventRe
 
         while (resultSet.next()) {
             int id = resultSet.getInt(1);
-            Timestamp datetime = resultSet.getTimestamp(3);
-            String location = resultSet.getString(2);
-            int eventTypeID = resultSet.getInt(3);
-            String name = resultSet.getString(2);
-            int userId = resultSet.getInt(3);
+            Timestamp datetime = resultSet.getTimestamp(2);
+            String location = resultSet.getString(3);
+            int eventTypeID = resultSet.getInt(4);
+            String name = resultSet.getString(5);
+            int userId = resultSet.getInt(6);
             events.add(new Event(id, datetime, location, eventTypeID, name, userId));
         }
 

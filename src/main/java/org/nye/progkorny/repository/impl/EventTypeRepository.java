@@ -17,8 +17,8 @@ public class EventTypeRepository extends GenericDataAccess<EventType> implements
 
     @Override
     public boolean insertEventType(EventType eventType) {
-        int rowsAffected = upsert("INSERT INTO eventType " +
-                "(name) VALUES" + eventType.getName()+ ";");
+        int rowsAffected = upsert("INSERT INTO eventtype " +
+                "(name) VALUES('" + eventType.getName()+ "');");
         return rowsAffected == 1;
     }
 
@@ -26,19 +26,19 @@ public class EventTypeRepository extends GenericDataAccess<EventType> implements
 
     @Override
     public EventType getEventTypeById(int id) throws SQLException {
-        String sqlQuery = String.format("SELECT * FROM eventType WHERE id = %d;", id);
+        String sqlQuery = String.format("SELECT * FROM eventtype WHERE id = %d;", id);
         return query(sqlQuery).get(0);
     }
 
     @Override
     public EventType getEventTypeByName(String name) throws SQLException {
-        String sqlQuery = String.format("SELECT * FROM eventType WHERE name = '%s';", name);
+        String sqlQuery = String.format("SELECT * FROM eventtype WHERE name = '%s';", name);
         return query(sqlQuery).get(0);
     }
 
     @Override
     public List<EventType> getAllEventType() throws SQLException {
-        String sqlQuery = "SELECT * FROM eventType;";
+        String sqlQuery = "SELECT * FROM eventtype;";
         return query(sqlQuery);
     }
 
@@ -47,7 +47,7 @@ public class EventTypeRepository extends GenericDataAccess<EventType> implements
 
     @Override
     public boolean updateEventType(EventType eventType) {
-        int rowsAffected = upsert("UPDATE eventType SET name = " + eventType.getName() + ";");
+        int rowsAffected = upsert("UPDATE eventtype SET name = '" + eventType.getName() + "' WHERE id = " + eventType.getId() + ";");
         return rowsAffected == 1;
     }
 
@@ -55,7 +55,7 @@ public class EventTypeRepository extends GenericDataAccess<EventType> implements
 
     @Override
     public boolean deleteEventType(int id) {
-        String sqlQuery = String.format("DELETE FROM eventType WHERE id = %d", id);
+        String sqlQuery = String.format("DELETE FROM eventtype WHERE id = %d", id);
         return (delete(sqlQuery));
     }
 
