@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -48,7 +49,7 @@ public class EventController {
     }
 
     @GetMapping(path = "/eventtype", params = "eventTypeId")
-    public List<Event> getEventByEventTypeId(@RequestParam("eventTypeId") int eventTypeId){
+    public List<Event> getEventByEventTypeId(@RequestParam("eventTypeId") int eventTypeId) throws SQLException {
         return eventService.getEventByEventTypeId(eventTypeId);
     }
 
@@ -63,7 +64,7 @@ public class EventController {
     }
 
     @GetMapping(path = "/datetime", params = "datetime")
-    public Event getEventByDateTime(@RequestParam("datetime") int datetime) throws SQLException {
+    public Event getEventByDateTime(@RequestParam("datetime") Timestamp datetime) throws SQLException {
         return eventService.getEventByDateTime(datetime);
     }
 

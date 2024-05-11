@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.time.LocalTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -37,9 +37,9 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public List<Event> getEventByEventTypeId(int id) {
+    public List<Event> getEventByEventTypeId(int id) throws SQLException {
 
-        return getEventByEventTypeId(id);
+        return eventRepository.getEventByEventTypeId(id);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public Event getEventByDateTime(int datetime) throws SQLException {
+    public Event getEventByDateTime(Timestamp datetime) throws SQLException {
         return eventRepository.getEventByDateTime(datetime);
     }
 

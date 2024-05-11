@@ -3,7 +3,7 @@ package org.nye.progkorny.service;
 import org.nye.progkorny.model.Event;
 
 import java.sql.SQLException;
-import java.time.LocalTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface EventServiceInterface {
@@ -12,11 +12,11 @@ public interface EventServiceInterface {
     // R
     List<Event> getAllEvent() throws SQLException;
     Event getEventById(int id) throws SQLException;
-    List<Event> getEventByEventTypeId(int id);
+    List<Event> getEventByEventTypeId(int id) throws SQLException;
     Event getEventByLocation(String location) throws SQLException;
     Event getEventByName(String name) throws SQLException;
     List<Event> getEventByUserId(int id) throws SQLException;
-    Event getEventByDateTime(int datetime) throws SQLException;
+    Event getEventByDateTime(Timestamp datetime) throws SQLException;
     // U
     boolean updateEvent(Event event);
     // D

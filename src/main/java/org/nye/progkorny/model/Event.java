@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @Table(name = "event")
 public class Event {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     private Timestamp datetime;

@@ -14,7 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
 
