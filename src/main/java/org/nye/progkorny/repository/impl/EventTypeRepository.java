@@ -1,13 +1,12 @@
 package org.nye.progkorny.repository.impl;
 
-import org.nye.progkorny.model.Event;
+
 import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.repository.EventTypeRepositoryInterface;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
