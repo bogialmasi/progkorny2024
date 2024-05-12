@@ -1,6 +1,5 @@
 package org.nye.progkorny.controller;
 
-import org.nye.progkorny.model.Event;
 import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.service.impl.EventTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class EventTypeController {
 
     // C
     @PostMapping(path = "/")
-    public ResponseEntity<Void> InsertEventType(@RequestBody EventType eventType) {
+    public ResponseEntity<Void> insertEventType(@RequestBody EventType eventType) {
         boolean result = eventTypeService.addEventType(eventType);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

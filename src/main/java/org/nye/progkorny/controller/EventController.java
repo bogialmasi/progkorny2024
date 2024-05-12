@@ -23,7 +23,7 @@ public class EventController {
 
     // C
     @PostMapping(path = "/")
-    public ResponseEntity<Void> InsertEvent(@RequestBody Event event) {
+    public ResponseEntity<Void> insertEvent(@RequestBody Event event) {
         boolean result = eventService.addEvent(event);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

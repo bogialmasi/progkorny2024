@@ -22,7 +22,7 @@ public class UserController {
 
     // C
     @PostMapping(path = "/")
-    public ResponseEntity<Void> InsertUSer(@RequestBody User user) {
+    public ResponseEntity<Void> insertUser(@RequestBody User user) {
         boolean result = userService.addUser(user);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
