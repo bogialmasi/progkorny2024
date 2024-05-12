@@ -30,7 +30,7 @@ public class EventTypeControllerTest {
     private EventTypeRepository eventTypeRepository;
 
     @Test
-    public void testAddEventType(){
+    public void testInsertEventType(){
         EventType eventType = new EventType(100, "TESTSUBJECT");
         when(eventTypeRepository.insertEventType(eventType)).thenReturn(true);
         EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
@@ -40,7 +40,7 @@ public class EventTypeControllerTest {
     }
 
     @Test
-    public void testAllGetEventType() throws SQLException {
+    public void testGetAllEventType() throws SQLException {
         List<EventType> eventTypes = Arrays.asList(
                 new EventType(100, "TESTSUBJECT"),
                 new EventType(100, "TESTSUBJECT")
@@ -52,12 +52,21 @@ public class EventTypeControllerTest {
     }
 
     @Test
-    public void testEventTypeUserById() throws SQLException{
+    public void testGetEventTypeById() throws SQLException{
         int id = 1;
         EventType eventType = new EventType(id, "TESTSUBJECT");
         when(eventTypeRepository.getEventTypeById(id)).thenReturn(eventType);
         EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         EventType result = eventTypeService.getEventTypeById(id);
         assertEquals(id, eventType.getId());
+    }
+
+    @Test
+    public void testGetEventTypeByName() throws SQLException {
+        String name = "B";
+        EventType eventType = new EventType(1, name);
+        when(eventTypeRepository.getEventTypeByName(name)).thenReturn(eventType);
+        EventType result = eventTypeRepository.getEventTypeByName(name);
+        assertEquals(name, result.getName());
     }
 }

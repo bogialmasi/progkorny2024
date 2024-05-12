@@ -30,7 +30,7 @@ public class UserControllerTest {
     private UserRepository userRepository;
 
     @Test
-    public void testAddUser(){
+    public void testInsertUser(){
         User user = new User(100, "TESTSUBJECT");
         when(userRepository.insertUser(user)).thenReturn(true);
         UserService userService = new UserService(userRepository);
@@ -59,5 +59,14 @@ public class UserControllerTest {
         UserService userService = new UserService(userRepository);
         User result = userService.getUserById(id);
         assertEquals(id, user.getId());
+    }
+
+    @Test
+    public void testGetUserByName() throws SQLException {
+        String name = "B";
+        User user = new User(1, name);
+        when(userRepository.getUserByName(name)).thenReturn(user);
+        User result = userRepository.getUserByName(name);
+        assertEquals(name, result.getName());
     }
 }

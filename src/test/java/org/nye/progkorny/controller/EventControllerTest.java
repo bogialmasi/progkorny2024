@@ -32,7 +32,7 @@ public class EventControllerTest {
     private EventRepository eventRepository;
 
     @Test
-    public void testAddEvent() {
+    public void testInsertEvent() {
         Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
         when(eventRepository.insertEvent(event)).thenReturn(true);
         EventService eventService = new EventService(eventRepository);
@@ -42,10 +42,10 @@ public class EventControllerTest {
     }
 
     @Test
-    public void testAllGetEvent() throws SQLException {
+    public void testGetAllEvent() throws SQLException {
         List<Event> events = Arrays.asList(
                 new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1),
-                new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1)
+                new Event(200, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1)
                 );
         when(eventRepository.getAllEvent()).thenReturn(events);
         EventService eventService = new EventService(eventRepository);
@@ -54,7 +54,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void testEventUserById() throws SQLException{
+    public void testGetEventById() throws SQLException{
         int id = 1;
         Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
         when(eventRepository.getEventById(id)).thenReturn(event);
@@ -62,4 +62,56 @@ public class EventControllerTest {
         Event result = eventService.getEventById(id);
         assertEquals(id, event.getId());
     }
+
+    @Test
+    public void testGetEventByUserId() throws SQLException {
+        List<Event> events = Arrays.asList(
+                new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1),
+                new Event(200, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1)
+        );
+        int userId = 1;
+        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", userId);
+        when(eventRepository.getEventByUserId(userId)).thenReturn(events);
+        List<Event> result = eventRepository.getEventByUserId(userId);
+        assertEquals(userId, events.get(0).getUserId());
+    }
+    @Test
+    public void testGetEventByEventTypeId() throws SQLException {
+        List<Event> events = Arrays.asList(
+                new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1),
+                new Event(200, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1)
+        );
+        int eventTypeId = 1;
+        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", eventTypeId, "TEST", 1);
+        when(eventRepository.getEventByEventTypeId(eventTypeId)).thenReturn(events);
+        List<Event> result = eventRepository.getEventByEventTypeId(eventTypeId);
+        assertEquals(eventTypeId, events.get(0).getEventTypeId());
+    }
+
+    @Test
+    public void testGetEventByName() throws SQLException {
+        String name = "B";
+        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, name, 1);
+        when(eventRepository.getEventByName(name)).thenReturn(event);
+        Event result = eventRepository.getEventByName(name);
+        assertEquals(name, result.getName());
+    }
+    @Test
+    public void testGetEventByLocation() throws SQLException {
+        String location = "B";
+        Event event = new Event(100, Timestamp.from(Instant.now()), location, 1, "B", 1);
+        when(eventRepository.getEventByLocation(location)).thenReturn(event);
+        Event result = eventRepository.getEventByLocation(location);
+        assertEquals(location, result.getLocation());
+    }
+
+    @Test
+    public void testGetEventByDateTime() throws SQLException {
+        Timestamp datetime = Timestamp.from(Instant.now());
+        Event event = new Event(100, datetime, "B", 1, "B", 1);
+        when(eventRepository.getEventByDateTime(datetime)).thenReturn(event);
+        Event result = eventRepository.getEventByDateTime(datetime);
+        assertEquals(datetime, result.getDatetime());
+    }
+
 }
