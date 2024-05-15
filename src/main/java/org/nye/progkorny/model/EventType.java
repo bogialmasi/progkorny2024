@@ -15,7 +15,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table(name = "eventtype")
 public class EventType {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
     String name;
