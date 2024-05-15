@@ -2,15 +2,11 @@ package org.nye.progkorny.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.nye.progkorny.controller.EventTypeController;
 import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.repository.impl.EventTypeRepository;
 import org.nye.progkorny.service.impl.EventTypeService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -19,7 +15,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EventTypeServiceTest {
@@ -73,5 +68,21 @@ public class EventTypeServiceTest {
     }
 
     // U
+    @Test
+    public void testUpdateEventType() throws SQLException{
+        when(eventTypeRepository.updateEventType(any(EventType.class))).thenReturn(true);
+        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
+        boolean result = eventTypeService.updateEventType(new EventType(1, "TESTSUBJECT"));
+        assertEquals(result, true);
+    }
 
+    // D
+    @Test
+    public void testDeleteEventType() throws SQLException{
+        int id = 1;
+        when(eventTypeRepository.deleteEventType(id)).thenReturn(true);
+        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
+        boolean result = eventTypeService.deleteEventType(id);
+        assertEquals(result, true);
+    }
 }

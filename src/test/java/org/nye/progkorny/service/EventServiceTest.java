@@ -7,8 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.nye.progkorny.controller.EventController;
 import org.nye.progkorny.model.Event;
+import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.repository.impl.EventRepository;
 import org.nye.progkorny.service.impl.EventService;
+import org.nye.progkorny.service.impl.EventTypeService;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -26,6 +28,8 @@ public class EventServiceTest {
     @Mock
     private EventRepository eventRepository;
 
+    // C
+
     @Test
     public void testInsertEvent() {
         Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
@@ -35,6 +39,8 @@ public class EventServiceTest {
         assertTrue(result);
         verify(eventRepository, times(1)).insertEvent(event);
     }
+
+    // R
 
     @Test
     public void testGetAllEvent() throws SQLException {
@@ -107,6 +113,27 @@ public class EventServiceTest {
         when(eventRepository.getEventByDateTime(datetime)).thenReturn(event);
         Event result = eventRepository.getEventByDateTime(datetime);
         assertEquals(datetime, result.getDatetime());
+    }
+
+    // U
+
+    @Test
+    public void testUpdateEvent() throws SQLException{
+        when(eventRepository.updateEvent(any(Event.class))).thenReturn(true);
+        EventService eventService = new EventService(eventRepository);
+        boolean result = eventService.updateEvent(new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1));
+        assertEquals(result, true);
+    }
+
+    // D
+
+    @Test
+    public void testDeleteEvent() throws SQLException{
+        int id = 1;
+        when(eventRepository.deleteEvent(id)).thenReturn(true);
+        EventService eventService = new EventService(eventRepository);
+        boolean result = eventService.deleteEvent(id);
+        assertEquals(result, true);
     }
 
 }
