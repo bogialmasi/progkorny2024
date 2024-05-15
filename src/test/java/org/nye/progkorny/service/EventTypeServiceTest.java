@@ -9,6 +9,8 @@ import org.nye.progkorny.controller.EventTypeController;
 import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.repository.impl.EventTypeRepository;
 import org.nye.progkorny.service.impl.EventTypeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -25,6 +27,8 @@ public class EventTypeServiceTest {
     @Mock
     private EventTypeRepository eventTypeRepository;
 
+    // C
+
     @Test
     public void testInsertEventType(){
         EventType eventType = new EventType(100, "TESTSUBJECT");
@@ -34,6 +38,8 @@ public class EventTypeServiceTest {
         assertTrue(result);
         verify(eventTypeRepository, times(1)).insertEventType(eventType);
     }
+
+    // R
 
     @Test
     public void testGetAllEventType() throws SQLException {
@@ -65,4 +71,7 @@ public class EventTypeServiceTest {
         EventType result = eventTypeRepository.getEventTypeByName(name);
         assertEquals(name, result.getName());
     }
+
+    // U
+
 }
