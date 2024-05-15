@@ -2,13 +2,9 @@ package org.nye.progkorny.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.nye.progkorny.model.Event;
-import org.nye.progkorny.model.EventType;
-import org.nye.progkorny.model.User;
-import org.nye.progkorny.repository.impl.EventRepository;
 import org.nye.progkorny.service.impl.EventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EventControllerTest {
@@ -30,6 +25,7 @@ public class EventControllerTest {
     @Mock
     private EventService eventService;
 
+    // C
     @Test
     public void testInsertEvent() {
         Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
@@ -39,6 +35,8 @@ public class EventControllerTest {
         verify(eventService, times(1)).addEvent(event);
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
     }
+
+    // R
 
     @Test
     public void testGetAllEvent() throws SQLException {
@@ -116,6 +114,25 @@ public class EventControllerTest {
         EventController eventController = new EventController(eventService);
         Event result = eventController.getEventByDateTime(datetime);
         assertEquals(datetime, result.getDatetime());
+    }
+
+    // U
+
+    @Test
+    public void testUpdateEvent() throws SQLException{
+        when(eventService.updateEvent(any(Event.class))).thenReturn(true);
+        boolean result = eventService.updateEvent(new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1));
+        assertTrue(result);
+    }
+
+    // D
+
+    @Test
+    public void testDeleteEvent() throws SQLException{
+        int id = 1;
+        when(eventService.deleteEvent(id)).thenReturn(true);
+        boolean result = eventService.deleteEvent(id);
+        assertTrue(result);
     }
 
 }
