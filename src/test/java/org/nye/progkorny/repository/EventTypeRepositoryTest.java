@@ -6,9 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.nye.progkorny.model.EventType;
+import org.nye.progkorny.repository.impl.DriverManagerFactory;
 import org.nye.progkorny.repository.impl.EventTypeRepository;
+import org.nye.progkorny.repository.impl.GenericDataAccess;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,98 +22,182 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EventTypeRepositoryTest {
+
     @Mock
+    DriverManagerFactory driverManagerFactory;
+
+    @Mock
+    Connection conn;
+
+    @Mock
+    Statement statement;
+
+    @Mock
+    ResultSet resultSet;
+
     EventTypeRepository eventTypeRepository;
     private EventType eventType;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException {
+        eventTypeRepository = new EventTypeRepository(new GenericDataAccess(driverManagerFactory));
         eventType = new EventType(100, "B");
+
+
+        when(driverManagerFactory.getConnection()).thenReturn(conn);
+        when(conn.createStatement()).thenReturn(statement);
     }
 
     // C
     @Test
     public void testInsertEventType_Successful() throws SQLException {
-        when(eventTypeRepository.insertEventType(eventType)).thenReturn(true);
+        when(statement.executeUpdate(anyString())).thenReturn(1);
         assertTrue(eventTypeRepository.insertEventType(eventType));
-        verify(eventTypeRepository, times(1)).insertEventType(eventType);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verify(driverManagerFactory, times(1)).getConnection();
+        verify(conn, times(1)).createStatement();
+
     }
 
     @Test
     public void testInsertEventType_Failure() throws SQLException {
-        when(eventTypeRepository.insertEventType(eventType)).thenReturn(false);
+        //arrange
+        when(statement.executeUpdate(anyString())).thenReturn(0);
+
+        //act
         boolean result = eventTypeRepository.insertEventType(eventType);
+
+        //assert
         assertFalse(result);
-        verify(eventTypeRepository, times(1)).insertEventType(eventType);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verifyConnectionSteps();
     }
 
 
     // R
     @Test
     public void testGetAllEventType() throws SQLException {
+        //arrange
+        setupEventTypeMap();
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
         List<EventType> expectedEventTypes = new ArrayList<>();
         expectedEventTypes.add(eventType);
-        when(eventTypeRepository.getAllEventType()).thenReturn(expectedEventTypes);
+
+        //act
         List<EventType> actualEventTypes = eventTypeRepository.getAllEventType();
+
+        //assert
         assertEquals(expectedEventTypes, actualEventTypes);
-        verify(eventTypeRepository, times(1)).getAllEventType();
+        verify(statement, times(1)).executeQuery(anyString());
+        verifyConnectionSteps();
+
     }
+
+
 
     @Test
     public void testGetEventTypeById() throws SQLException {
+        //arrange
         int id = eventType.getId();
-        when(eventTypeRepository.getEventTypeById(id)).thenReturn(eventType);
+        setupEventTypeMap();
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
+
+        //act
         EventType actualEventType = eventTypeRepository.getEventTypeById(id);
+
+        //assert
         assertEquals(eventType, actualEventType);
-        verify(eventTypeRepository, times(1)).getEventTypeById(id);
+        verify(statement, times(1)).executeQuery(anyString());
+        verifyConnectionSteps();
+
     }
 
     @Test
     public void testGetEventTypeByName() throws SQLException {
+        //arrange
         String name = eventType.getName();
-        when(eventTypeRepository.getEventTypeByName(name)).thenReturn(eventType);
+        setupEventTypeMap();
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
+
+        //act
         EventType actualEventType = eventTypeRepository.getEventTypeByName(name);
+
+        //assert
         assertEquals(eventType, actualEventType);
-        verify(eventTypeRepository, times(1)).getEventTypeByName(name);
+        verify(statement, times(1)).executeQuery(anyString());
+        verifyConnectionSteps();
     }
 
     // U
 
     @Test
     public void testUpdateEventType_Successful() throws SQLException {
-        EventTypeRepository eventTypeRepository = mock(EventTypeRepository.class);
+        //arrange
         EventType eventType = new EventType(200, "BC");
-        when(eventTypeRepository.updateEventType(eventType)).thenReturn(true);
-        assertTrue(eventTypeRepository.updateEventType(eventType));
-        verify(eventTypeRepository, times(1)).updateEventType(eventType);
+        when(statement.executeUpdate(anyString())).thenReturn(1);
+
+        //act
+        var result = eventTypeRepository.updateEventType(eventType);
+
+        assertTrue(result);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verifyConnectionSteps();
     }
 
     @Test
     public void testUpdateEventType_Failure() throws SQLException {
-        EventTypeRepository eventTypeRepository = mock(EventTypeRepository.class);
-        EventType eventType = new EventType(100, "B");
-        when(eventTypeRepository.updateEventType(eventType)).thenReturn(false);
-        assertFalse(eventTypeRepository.updateEventType(eventType));
-        verify(eventTypeRepository, times(1)).updateEventType(eventType);
+        //arrange
+        EventType eventType = new EventType(200, "BC");
+        when(statement.executeUpdate(anyString())).thenReturn(0);
+
+        //act
+        boolean result = eventTypeRepository.updateEventType(eventType);
+
+        assertFalse(result);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verifyConnectionSteps();
     }
 
     // D
 
     @Test
-    public void testDeleteEventType_Successful(){
-        EventTypeRepository eventTypeRepository = mock(EventTypeRepository.class);
+    public void testDeleteEventType_Successful() throws SQLException {
+        //arrange
         int id = 1;
-        when(eventTypeRepository.deleteEventType(id)).thenReturn(true);
-        assertTrue(eventTypeRepository.deleteEventType(id));
-        verify(eventTypeRepository, times(1)).deleteEventType(id);
+        when(statement.execute(anyString())).thenReturn(true);
+
+        //act
+        boolean result = eventTypeRepository.deleteEventType(id);
+
+        //assert
+        assertFalse(result);
+        verify(statement, times(1)).execute(anyString());
+        verifyConnectionSteps();
     }
 
     @Test
-    public void testDeleteEventType_Failure(){
-        EventTypeRepository eventTypeRepository = mock(EventTypeRepository.class);
+    public void testDeleteEventType_Failure() throws SQLException {
+        //arrange
         int id = 1;
-        when(eventTypeRepository.deleteEventType(id)).thenReturn(false);
-        assertFalse(eventTypeRepository.deleteEventType(id));
-        verify(eventTypeRepository, times(1)).deleteEventType(id);
+        when(statement.execute(anyString())).thenReturn(false);
+
+        //act
+        boolean result = eventTypeRepository.deleteEventType(id);
+
+        //assert
+        assertTrue(result);
+        verify(statement, times(1)).execute(anyString());
+        verifyConnectionSteps();
+    }
+
+    private void verifyConnectionSteps() throws SQLException {
+        verify(driverManagerFactory, times(1)).getConnection();
+        verify(conn, times(1)).createStatement();
+    }
+
+    private void setupEventTypeMap() throws SQLException {
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        when(resultSet.getInt(1)).thenReturn(eventType.getId());
+        when(resultSet.getString(2)).thenReturn(eventType.getName());
     }
 }

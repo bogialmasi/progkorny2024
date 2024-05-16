@@ -2,7 +2,9 @@ package org.nye.progkorny.repository.impl;
 
 import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.model.User;
+import org.nye.progkorny.repository.GenericDataAccessInterface;
 import org.nye.progkorny.repository.UserRepositoryInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -11,13 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class UserRepository extends GenericDataAccess<User> implements UserRepositoryInterface {
+public class UserRepository implements UserRepositoryInterface {
+
+    @Autowired
+    GenericDataAccessInterface dac;
+
+    public UserRepository(GenericDataAccessInterface dac) {
+        this.dac = dac;
+    }
 
     // C
 
     @Override
-    public boolean insertUser(User user) {
-        int rowsAffected = upsert("INSERT INTO user " +
+    public boolean insertUser(User user) throws SQLException {
+        int rowsAffected = dac.upsert("INSERT INTO user " +
                 "(name) VALUES ('" + user.getName()+ "');");
         return rowsAffected == 1;
     }
@@ -27,37 +36,36 @@ public class UserRepository extends GenericDataAccess<User> implements UserRepos
     @Override
     public User getUserById(int id) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM user WHERE id = %d;", id);
-        return query(sqlQuery).get(0);
+        return map(dac.query(sqlQuery)).get(0);
     }
 
     @Override
     public User getUserByName(String name) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM user WHERE name = '%s';", name);
-        return query(sqlQuery).get(0);
+        return map(dac.query(sqlQuery)).get(0);
     }
 
     @Override
     public List<User> getAllUser() throws SQLException {
         String sqlQuery = "SELECT * FROM user;";
-        return query(sqlQuery);
+        return map(dac.query(sqlQuery));
     }
 
     // U
 
     @Override
-    public boolean updateUser(User user) {
-        int rowsAffected = upsert("UPDATE user SET name = '" + user.getName() + "' WHERE id = " + user.getId()+ " ;");
+    public boolean updateUser(User user) throws SQLException {
+        int rowsAffected = dac.upsert("UPDATE user SET name = '" + user.getName() + "' WHERE id = " + user.getId()+ " ;");
         return rowsAffected == 1;
     }
 
     // D
     @Override
-    public boolean deleteUser(int id) {
+    public boolean deleteUser(int id) throws SQLException {
         String sqlQuery = String.format("DELETE FROM user WHERE id = %d", id);
-        return (delete(sqlQuery));
+        return (dac.delete(sqlQuery));
     }
 
-    @Override
     List<User> map(ResultSet resultSet) throws SQLException {
         List<User> users = new ArrayList<>();
 

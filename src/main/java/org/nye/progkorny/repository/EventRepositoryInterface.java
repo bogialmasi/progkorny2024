@@ -15,8 +15,8 @@ public interface EventRepositoryInterface {
     List<Event> getEventByEventTypeId(int id) throws SQLException;
     List<Event> getEventByUserId(int id) throws SQLException;
 
-    boolean deleteEvent(int id);
-    boolean updateEvent(Event event);
-    boolean insertEvent(Event event);
+    boolean deleteEvent(int id) throws SQLException;
+    boolean updateEvent(Event event) throws SQLException;
+    boolean insertEvent(Event event) throws SQLException;
 
 }

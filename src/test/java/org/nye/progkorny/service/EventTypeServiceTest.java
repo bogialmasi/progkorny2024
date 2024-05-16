@@ -25,7 +25,7 @@ public class EventTypeServiceTest {
     // C
 
     @Test
-    public void testInsertEventType(){
+    public void testInsertEventType() throws SQLException {
         EventType eventType = new EventType(100, "TESTSUBJECT");
         when(eventTypeRepository.insertEventType(eventType)).thenReturn(true);
         EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);

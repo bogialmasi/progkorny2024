@@ -23,7 +23,7 @@ public class EventTypeController {
 
     // C
     @PostMapping(path = "/")
-    public ResponseEntity<Void> insertEventType(@RequestBody EventType eventType) {
+    public ResponseEntity<Void> insertEventType(@RequestBody EventType eventType) throws SQLException {
         boolean result = eventTypeService.addEventType(eventType);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -61,7 +61,7 @@ public class EventTypeController {
 
     // D
     @DeleteMapping(path = "/", params = "id")
-    public ResponseEntity<Void> deleteEventType(@RequestParam("id") int id){
+    public ResponseEntity<Void> deleteEventType(@RequestParam("id") int id) throws SQLException {
         boolean result = eventTypeService.deleteEventType(id);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.OK);

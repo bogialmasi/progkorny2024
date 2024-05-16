@@ -20,7 +20,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public boolean addUser(User user) {
+    public boolean addUser(User user) throws SQLException {
         return userRepository.insertUser(user);
     }
 
@@ -40,12 +40,12 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public boolean updateUser(User user) {
+    public boolean updateUser(User user) throws SQLException {
         return userRepository.updateUser(user);
     }
 
     @Override
-    public boolean deleteUser(int id) {
+    public boolean deleteUser(int id) throws SQLException {
         return userRepository.deleteUser(id);
     }
 }

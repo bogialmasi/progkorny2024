@@ -21,7 +21,7 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public boolean addEvent(Event event) {
+    public boolean addEvent(Event event) throws SQLException {
         return eventRepository.insertEvent(event);
     }
 
@@ -66,12 +66,12 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public boolean updateEvent(Event event) {
+    public boolean updateEvent(Event event) throws SQLException {
         return eventRepository.updateEvent(event);
     }
 
     @Override
-    public boolean deleteEvent(int id) {
+    public boolean deleteEvent(int id) throws SQLException {
         return eventRepository.deleteEvent(id);
     }
 }

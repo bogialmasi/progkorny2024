@@ -23,7 +23,7 @@ public class EventController {
 
     // C
     @PostMapping(path = "/")
-    public ResponseEntity<Void> insertEvent(@RequestBody Event event) {
+    public ResponseEntity<Void> insertEvent(@RequestBody Event event) throws SQLException {
         boolean result = eventService.addEvent(event);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -85,7 +85,7 @@ public class EventController {
 
     // D
     @DeleteMapping(path = "/", params = "id")
-    public ResponseEntity<Void> deleteEvent(@RequestParam("id") int id){
+    public ResponseEntity<Void> deleteEvent(@RequestParam("id") int id) throws SQLException {
         boolean result = eventService.deleteEvent(id);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.OK);

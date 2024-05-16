@@ -25,7 +25,7 @@ public class UserControllerTest {
     // C
 
     @Test
-    public void testInsertUser(){
+    public void testInsertUser() throws SQLException {
         User user = new User(100, "TESTSUBJECT");
         when(userService.addUser(user)).thenReturn(true);
         UserController userController = new UserController(userService);

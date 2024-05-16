@@ -2,6 +2,8 @@ package org.nye.progkorny.repository.impl;
 
 import org.nye.progkorny.model.Event;
 import org.nye.progkorny.repository.EventRepositoryInterface;
+import org.nye.progkorny.repository.GenericDataAccessInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -11,13 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class EventRepository extends GenericDataAccess<Event> implements EventRepositoryInterface {
+public class EventRepository implements EventRepositoryInterface {
+
+
+    @Autowired
+    private GenericDataAccessInterface dac;
+
+    public EventRepository(GenericDataAccessInterface dac) {
+        this.dac = dac;
+    }
 
     // C
-
     @Override
-    public boolean insertEvent(Event event) {
-        int rowsAffected = upsert("INSERT INTO event (datetime, location, eventtypeid, name, userid) VALUES('" +
+    public boolean insertEvent(Event event) throws SQLException {
+        int rowsAffected = dac.upsert("INSERT INTO event (datetime, location, eventtypeid, name, userid) VALUES('" +
                 event.getDatetime() +"', '" + event.getLocation() +"', '" + event.getEventTypeId() + "', '" +
                 event.getName() +"', '" + event.getUserId() + "');");
         return rowsAffected == 1;
@@ -28,50 +37,50 @@ public class EventRepository extends GenericDataAccess<Event> implements EventRe
     @Override
     public List<Event> getAllEvent() throws SQLException {
         String sqlQuery = "SELECT * FROM event;";
-        return query(sqlQuery);
+        return map(dac.query(sqlQuery));
     }
 
     @Override
     public Event getEventById(int id) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM event WHERE id = %d;", id);
-        return query(sqlQuery).get(0);
+        return map(dac.query(sqlQuery)).get(0);
     }
 
     @Override
     public Event getEventByName(String name) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM event WHERE name = '%s';", name);
-        return query(sqlQuery).get(0);
+        return map(dac.query(sqlQuery)).get(0);
     }
 
     @Override
     public Event getEventByLocation(String location) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM event WHERE location = '%s';", location);
-        return query(sqlQuery).get(0);
+        return map(dac.query(sqlQuery)).get(0);
     }
 
     @Override
     public Event getEventByDateTime(Timestamp datetime) throws SQLException {
         String sqlQuery = "SELECT * FROM event WHERE datetime = '" + datetime + "';";
-        return query(sqlQuery).get(0);
+        return map(dac.query(sqlQuery)).get(0);
     }
 
     @Override
     public List<Event> getEventByEventTypeId(int id) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM event WHERE eventtypeid =" + id + ";");
-        return query(sqlQuery);
+        return map(dac.query(sqlQuery));
     }
 
     @Override
     public List<Event> getEventByUserId(int id) throws SQLException {
         String sqlQuery = String.format("SELECT * FROM event WHERE userid =" + id + ";");
-        return query(sqlQuery);
+        return map(dac.query(sqlQuery));
     }
 
     // U
 
     @Override
-    public boolean updateEvent(Event event) {
-        int rowsAffected = upsert("UPDATE event " +
+    public boolean updateEvent(Event event) throws SQLException {
+        int rowsAffected = dac.upsert("UPDATE event " +
                 "SET datetime = '" + event.getDatetime() +
                 "', location = '" + event.getLocation() +
                 "', eventtypeid = " + event.getEventTypeId() +
@@ -85,12 +94,11 @@ public class EventRepository extends GenericDataAccess<Event> implements EventRe
     // D
 
     @Override
-    public boolean deleteEvent(int id) {
+    public boolean deleteEvent(int id) throws SQLException {
         String sqlQuery = String.format("DELETE FROM event WHERE id = %d", id);
-        return (delete(sqlQuery));
+        return (dac.delete(sqlQuery));
     }
 
-    @Override
     List<Event> map(ResultSet resultSet) throws SQLException {
         List<Event> events = new ArrayList<>();
 

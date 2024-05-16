@@ -93,7 +93,7 @@ public class UserRepositoryTest {
     // D
 
     @Test
-    public void testDeleteUser_Successful(){
+    public void testDeleteUser_Successful() throws SQLException {
         UserRepository userRepository = mock(UserRepository.class);
         int id = 1;
         when(userRepository.deleteUser(id)).thenReturn(true);
@@ -102,7 +102,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void testDeleteUser_Failure(){
+    public void testDeleteUser_Failure() throws SQLException {
         UserRepository userRepository = mock(UserRepository.class);
         int id = 1;
         when(userRepository.deleteUser(id)).thenReturn(false);

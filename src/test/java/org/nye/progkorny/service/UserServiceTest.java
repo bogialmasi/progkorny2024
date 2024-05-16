@@ -25,7 +25,7 @@ public class UserServiceTest {
     // C
 
     @Test
-    public void testInsertUser(){
+    public void testInsertUser() throws SQLException {
         User user = new User(100, "TESTSUBJECT");
         when(userRepository.insertUser(user)).thenReturn(true);
         UserService userService = new UserService(userRepository);

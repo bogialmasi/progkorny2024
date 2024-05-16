@@ -27,7 +27,7 @@ public class EventControllerTest {
 
     // C
     @Test
-    public void testInsertEvent() {
+    public void testInsertEvent() throws SQLException {
         Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
         when(eventService.addEvent(event)).thenReturn(true);
         EventController eventController = new EventController(eventService);

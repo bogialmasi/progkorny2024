@@ -26,7 +26,7 @@ public class EventTypeControllerTest {
     // C
 
     @Test
-    public void testInsertEventType(){
+    public void testInsertEventType() throws SQLException {
         EventType eventType = new EventType(100, "TESTSUBJECT");
         when(eventTypeService.addEventType(eventType)).thenReturn(true);
         EventTypeController eventTypeController = new EventTypeController(eventTypeService);

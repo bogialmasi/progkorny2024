@@ -30,7 +30,7 @@ public class EventTypeService implements EventTypeServiceInterface {
         return eventTypeRepository.getEventTypeByName(name);
     }
 
-    public boolean addEventType(EventType eventType) {
+    public boolean addEventType(EventType eventType) throws SQLException {
         return eventTypeRepository.insertEventType(eventType);
     }
 
@@ -38,11 +38,11 @@ public class EventTypeService implements EventTypeServiceInterface {
         return eventTypeRepository.getEventTypeById(id);
     }
 
-    public boolean updateEventType(EventType eventType) {
+    public boolean updateEventType(EventType eventType) throws SQLException {
         return eventTypeRepository.updateEventType(eventType);
     }
 
-    public boolean deleteEventType(int id) {
+    public boolean deleteEventType(int id) throws SQLException {
         return eventTypeRepository.deleteEventType(id);
     }
 }

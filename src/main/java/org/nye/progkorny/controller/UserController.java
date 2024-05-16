@@ -22,7 +22,7 @@ public class UserController {
 
     // C
     @PostMapping(path = "/")
-    public ResponseEntity<Void> insertUser(@RequestBody User user) {
+    public ResponseEntity<Void> insertUser(@RequestBody User user) throws SQLException {
         boolean result = userService.addUser(user);
         if (result) {
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -62,7 +62,7 @@ public class UserController {
     // D
 
     @DeleteMapping(path = "/", params = "id")
-    public ResponseEntity<Void> deleteUser(@RequestParam("id") int id){
+    public ResponseEntity<Void> deleteUser(@RequestParam("id") int id) throws SQLException {
         boolean result = userService.deleteUser(id);
         if(result){
             return new ResponseEntity<Void>(HttpStatus.OK);
