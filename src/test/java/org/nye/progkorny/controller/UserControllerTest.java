@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,12 +30,21 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testInsertUser() throws SQLException {
+    public void testInsertUser_Success() throws SQLException {
         User user = new User(100, "TESTSUBJECT");
         when(userService.addUser(user)).thenReturn(true);
         ResponseEntity<Void> result = userController.insertUser(user);
         verify(userService, times(1)).addUser(user);
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+    }
+
+    @Test
+    public void testInsertUser_Failure() throws SQLException {
+        User user = new User(100, "TESTSUBJECT");
+        when(userService.addUser(user)).thenReturn(false);
+        ResponseEntity<Void> result = userController.insertUser(user);
+        verify(userService, times(1)).addUser(user);
+        assertEquals(HttpStatus.NOT_MODIFIED, result.getStatusCode());
     }
 
     @Test
@@ -67,20 +75,41 @@ public class UserControllerTest {
         User result = userController.getUserByName(name);
         assertEquals(name, result.getName());
     }
-
-
     @Test
-    public void testUpdateUser() throws SQLException{
+    public void testUpdateUser_Success() throws SQLException{
+        User user = new User(100, "B");
+        when(userService.getUserById(anyInt())).thenReturn(user);
         when(userService.updateUser(any(User.class))).thenReturn(true);
-        boolean result = userService.updateUser(new User(100, "TESTSUBJECT"));
-        assertTrue(result);
+        ResponseEntity<Void> result = userController.updateUser(user, user.getId());
+        verify(userService, times(1)).updateUser(user);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
-    public void testDeleteUser() throws SQLException{
-        int id = 1;
-        when(userService.deleteUser(id)).thenReturn(true);
-        boolean result = userService.deleteUser(id);
-        assertTrue(result);
+    public void testUpdateUser_Failure() throws SQLException{
+        User user = new User(100, "B");
+        when(userService.getUserById(anyInt())).thenReturn(user);
+        when(userService.updateUser(any(User.class))).thenReturn(false);
+        ResponseEntity<Void> result = userController.updateUser(user, user.getId());
+        verify(userService, times(1)).updateUser(user);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_MODIFIED);
+    }
+
+    @Test
+    public void testDeleteUser_Success() throws SQLException{
+        User user = new User(100, "B");
+        when(userService.deleteUser(anyInt())).thenReturn(true);
+        ResponseEntity<Void> result = userController.deleteUser(user.getId());
+        verify(userService, times(1)).deleteUser(user.getId());
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void testDeleteUser_Failure() throws SQLException{
+        User user = new User(100, "B");
+        when(userService.deleteUser(anyInt())).thenReturn(false);
+        ResponseEntity<Void> result = userController.deleteUser(user.getId());
+        verify(userService, times(1)).deleteUser(user.getId());
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_MODIFIED);
     }
 }

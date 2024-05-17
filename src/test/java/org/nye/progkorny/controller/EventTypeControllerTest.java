@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,12 +29,20 @@ public class EventTypeControllerTest {
         eventTypeController = new EventTypeController(eventTypeService);
     }
     @Test
-    public void testInsertEventType() throws SQLException {
+    public void testInsertEventType_Success() throws SQLException {
         EventType eventType = new EventType(100, "TESTSUBJECT");
         when(eventTypeService.addEventType(eventType)).thenReturn(true);
         ResponseEntity<Void> result = eventTypeController.insertEventType(eventType);
         verify(eventTypeService, times(1)).addEventType(eventType);
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+    }
+    @Test
+    public void testInsertEventType_Failure() throws SQLException {
+        EventType eventType = new EventType(100, "TESTSUBJECT");
+        when(eventTypeService.addEventType(eventType)).thenReturn(false);
+        ResponseEntity<Void> result = eventTypeController.insertEventType(eventType);
+        verify(eventTypeService, times(1)).addEventType(eventType);
+        assertEquals(HttpStatus.NOT_MODIFIED, result.getStatusCode());
     }
     @Test
     public void testGetAllEventType() throws SQLException {
@@ -67,19 +74,40 @@ public class EventTypeControllerTest {
     }
 
     @Test
-    public void testUpdateEventType() throws SQLException{
+    public void testUpdateEventType_Success() throws SQLException{
         EventType eventType = new EventType(100, "B");
+        when(eventTypeService.getEventTypeById(anyInt())).thenReturn(eventType);
         when(eventTypeService.updateEventType(any(EventType.class))).thenReturn(true);
-        boolean result = eventTypeService.updateEventType(eventType);
+        ResponseEntity<Void> result = eventTypeController.updateEventType(eventType, eventType.getId());
         verify(eventTypeService, times(1)).updateEventType(eventType);
-        assertTrue(result);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
-    public void testDeleteEventType() throws SQLException{
+    public void testUpdateEventType_Failure() throws SQLException{
         EventType eventType = new EventType(100, "B");
+        when(eventTypeService.getEventTypeById(anyInt())).thenReturn(eventType);
+        when(eventTypeService.updateEventType(any(EventType.class))).thenReturn(false);
+        ResponseEntity<Void> result = eventTypeController.updateEventType(eventType, eventType.getId());
+        verify(eventTypeService, times(1)).updateEventType(eventType);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_MODIFIED);
+    }
+
+    @Test
+    public void testDeleteEventType_Success() throws SQLException{
+        EventType eventType = new EventType(100, "B");
+        when(eventTypeService.deleteEventType(anyInt())).thenReturn(true);
         ResponseEntity<Void> result = eventTypeController.deleteEventType(eventType.getId());
         verify(eventTypeService, times(1)).deleteEventType(eventType.getId());
-        assertEquals(result, eventTypeController.deleteEventType(eventType.getId()));
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void testDeleteEventType_Failure() throws SQLException{
+        EventType eventType = new EventType(100, "B");
+        when(eventTypeService.deleteEventType(anyInt())).thenReturn(false);
+        ResponseEntity<Void> result = eventTypeController.deleteEventType(eventType.getId());
+        verify(eventTypeService, times(1)).deleteEventType(eventType.getId());
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_MODIFIED);
     }
 }
