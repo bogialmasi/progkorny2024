@@ -70,7 +70,6 @@ public class EventServiceTest {
                 new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId),
                 new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId)
         );
-        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId);
         when(eventRepository.getEventByUserId(userId)).thenReturn(events);
         List<Event> result = eventRepository.getEventByUserId(userId);
         assertEquals(result.size(),2);
@@ -82,7 +81,6 @@ public class EventServiceTest {
                 new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1),
                 new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1)
         );
-        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1);
         when(eventRepository.getEventByEventTypeId(eventTypeId)).thenReturn(events);
         List<Event> result = eventRepository.getEventByEventTypeId(eventTypeId);
         assertEquals(result.size(),2);
@@ -116,14 +114,12 @@ public class EventServiceTest {
     @Test
     public void testUpdateEvent_Success() throws SQLException{
         when(eventRepository.updateEvent(any(Event.class))).thenReturn(true);
-        EventService eventService = new EventService(eventRepository);
         boolean result = eventService.updateEvent(new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1));
         assertTrue(result);
     }
     @Test
     public void testUpdateEvent_Failure() throws SQLException{
         when(eventRepository.updateEvent(any(Event.class))).thenReturn(false);
-        EventService eventService = new EventService(eventRepository);
         boolean result = eventService.updateEvent(new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1));
         assertFalse(result);
     }
@@ -131,7 +127,6 @@ public class EventServiceTest {
     public void testDeleteEvent_Success() throws SQLException{
         int id = 1;
         when(eventRepository.deleteEvent(id)).thenReturn(true);
-        EventService eventService = new EventService(eventRepository);
         boolean result = eventService.deleteEvent(id);
         assertTrue(result);
     }
@@ -139,7 +134,6 @@ public class EventServiceTest {
     public void testDeleteEvent_Failure() throws SQLException{
         int id = 1;
         when(eventRepository.deleteEvent(id)).thenReturn(false);
-        EventService eventService = new EventService(eventRepository);
         boolean result = eventService.deleteEvent(id);
         assertFalse(result);
     }
