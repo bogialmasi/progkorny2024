@@ -1,5 +1,6 @@
 package org.nye.progkorny.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -12,30 +13,37 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EventTypeServiceTest {
+    private EventTypeService eventTypeService;
 
     @Mock
     private EventTypeRepository eventTypeRepository;
 
-    // C
-
-    @Test
-    public void testInsertEventType() throws SQLException {
-        EventType eventType = new EventType(100, "TESTSUBJECT");
-        when(eventTypeRepository.insertEventType(eventType)).thenReturn(true);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
-        boolean result = eventTypeService.addEventType(eventType);
-        assertTrue(result);
-        verify(eventTypeRepository, times(1)).insertEventType(eventType);
+    @BeforeEach
+    public void setUp(){
+        eventTypeService = new EventTypeService(eventTypeRepository);
     }
 
-    // R
-
+    @Test
+    public void testInsertEventType_Success() throws SQLException {
+        EventType eventType = new EventType(100, "TESTSUBJECT");
+        when(eventTypeRepository.insertEventType(eventType)).thenReturn(true);
+        boolean result = eventTypeService.addEventType(eventType);
+        verify(eventTypeRepository, times(1)).insertEventType(eventType);
+        assertTrue(result);
+    }
+    @Test
+    public void testInsertEventType_Failure() throws SQLException {
+        EventType eventType = new EventType(100, "TESTSUBJECT");
+        when(eventTypeRepository.insertEventType(eventType)).thenReturn(false);
+        boolean result = eventTypeService.addEventType(eventType);
+        verify(eventTypeRepository, times(1)).insertEventType(eventType);
+        assertFalse(result);
+    }
     @Test
     public void testGetAllEventType() throws SQLException {
         List<EventType> eventTypes = Arrays.asList(
@@ -43,7 +51,6 @@ public class EventTypeServiceTest {
                 new EventType(100, "TESTSUBJECT")
         );
         when(eventTypeRepository.getAllEventType()).thenReturn(eventTypes);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         List<EventType> result = eventTypeService.getAllEventType();
         assertEquals(eventTypes.size(), result.size());
     }
@@ -53,7 +60,6 @@ public class EventTypeServiceTest {
         int id = 1;
         EventType eventType = new EventType(id, "TESTSUBJECT");
         when(eventTypeRepository.getEventTypeById(id)).thenReturn(eventType);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         EventType result = eventTypeService.getEventTypeById(id);
         assertEquals(id, result.getId());
     }
@@ -66,23 +72,34 @@ public class EventTypeServiceTest {
         EventType result = eventTypeRepository.getEventTypeByName(name);
         assertEquals(name, result.getName());
     }
-
-    // U
     @Test
-    public void testUpdateEventType() throws SQLException{
+    public void testUpdateEventType_Success() throws SQLException{
         when(eventTypeRepository.updateEventType(any(EventType.class))).thenReturn(true);
         EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         boolean result = eventTypeService.updateEventType(new EventType(1, "TESTSUBJECT"));
-        assertEquals(result, true);
+        assertTrue(result);
     }
-
-    // D
     @Test
-    public void testDeleteEventType() throws SQLException{
+    public void testUpdateEventType_Failure() throws SQLException{
+        when(eventTypeRepository.updateEventType(any(EventType.class))).thenReturn(false);
+        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
+        boolean result = eventTypeService.updateEventType(new EventType(1, "TESTSUBJECT"));
+        assertFalse(result);
+    }
+    @Test
+    public void testDeleteEventType_Success() throws SQLException{
         int id = 1;
         when(eventTypeRepository.deleteEventType(id)).thenReturn(true);
         EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         boolean result = eventTypeService.deleteEventType(id);
-        assertEquals(result, true);
+        assertTrue(result);
+    }
+    @Test
+    public void testDeleteEventType_Failure() throws SQLException{
+        int id = 1;
+        when(eventTypeRepository.deleteEventType(id)).thenReturn(false);
+        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
+        boolean result = eventTypeService.deleteEventType(id);
+        assertFalse(result);
     }
 }

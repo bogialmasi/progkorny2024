@@ -1,5 +1,6 @@
 package org.nye.progkorny.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -10,41 +11,45 @@ import org.nye.progkorny.service.impl.EventService;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EventServiceTest {
+    private EventService eventService;
     @Mock
     private EventRepository eventRepository;
 
-    // C
-
-    @Test
-    public void testInsertEvent() throws SQLException {
-        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
-        when(eventRepository.insertEvent(event)).thenReturn(true);
-        EventService eventService = new EventService(eventRepository);
-        boolean result = eventService.addEvent(event);
-        assertTrue(result);
-        verify(eventRepository, times(1)).insertEvent(event);
+    @BeforeEach
+    public void setUp(){
+        eventService = new EventService(eventRepository);
     }
-
-    // R
-
+    @Test
+    public void testInsertEvent_Success() throws SQLException {
+        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1);
+        when(eventRepository.insertEvent(event)).thenReturn(true);
+        boolean result = eventService.addEvent(event);
+        verify(eventRepository, times(1)).insertEvent(event);
+        assertTrue(result);
+    }
+    @Test
+    public void testInsertEvent_Failure() throws SQLException {
+        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1);
+        when(eventRepository.insertEvent(event)).thenReturn(false);
+        boolean result = eventService.addEvent(event);
+        verify(eventRepository, times(1)).insertEvent(event);
+        assertFalse(result);
+    }
     @Test
     public void testGetAllEvent() throws SQLException {
         List<Event> events = Arrays.asList(
-                new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1),
-                new Event(200, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1)
+                new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1),
+                new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1)
         );
         when(eventRepository.getAllEvent()).thenReturn(events);
-        EventService eventService = new EventService(eventRepository);
         List<Event> result = eventService.getAllEvent();
         assertEquals(events.size(), result.size());
     }
@@ -52,9 +57,8 @@ public class EventServiceTest {
     @Test
     public void testGetEventById() throws SQLException{
         int id = 1;
-        Event event = new Event(id, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1);
+        Event event = new Event(id, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1);
         when(eventRepository.getEventById(id)).thenReturn(event);
-        EventService eventService = new EventService(eventRepository);
         Event result = eventService.getEventById(id);
         assertEquals(id, result.getId());
     }
@@ -63,10 +67,10 @@ public class EventServiceTest {
     public void testGetEventByUserId() throws SQLException {
         int userId = 1;
         List<Event> events = Arrays.asList(
-                new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", userId),
-                new Event(200, Timestamp.from(Instant.now()), "TEST", 1, "TEST", userId)
+                new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId),
+                new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId)
         );
-        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", userId);
+        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId);
         when(eventRepository.getEventByUserId(userId)).thenReturn(events);
         List<Event> result = eventRepository.getEventByUserId(userId);
         assertEquals(result.size(),2);
@@ -75,10 +79,10 @@ public class EventServiceTest {
     public void testGetEventByEventTypeId() throws SQLException {
         int eventTypeId = 1;
         List<Event> events = Arrays.asList(
-                new Event(100, Timestamp.from(Instant.now()), "TEST", eventTypeId, "TEST", 1),
-                new Event(200, Timestamp.from(Instant.now()), "TEST", eventTypeId, "TEST", 1)
+                new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1),
+                new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1)
         );
-        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", eventTypeId, "TEST", 1);
+        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1);
         when(eventRepository.getEventByEventTypeId(eventTypeId)).thenReturn(events);
         List<Event> result = eventRepository.getEventByEventTypeId(eventTypeId);
         assertEquals(result.size(),2);
@@ -87,7 +91,7 @@ public class EventServiceTest {
     @Test
     public void testGetEventByName() throws SQLException {
         String name = "B";
-        Event event = new Event(100, Timestamp.from(Instant.now()), "TEST", 1, name, 1);
+        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, name, 1);
         when(eventRepository.getEventByName(name)).thenReturn(event);
         Event result = eventRepository.getEventByName(name);
         assertEquals(name, result.getName());
@@ -95,7 +99,7 @@ public class EventServiceTest {
     @Test
     public void testGetEventByLocation() throws SQLException {
         String location = "B";
-        Event event = new Event(100, Timestamp.from(Instant.now()), location, 1, "B", 1);
+        Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), location, 1, "B", 1);
         when(eventRepository.getEventByLocation(location)).thenReturn(event);
         Event result = eventRepository.getEventByLocation(location);
         assertEquals(location, result.getLocation());
@@ -103,32 +107,40 @@ public class EventServiceTest {
 
     @Test
     public void testGetEventByDateTime() throws SQLException {
-        Timestamp datetime = Timestamp.from(Instant.now());
+        Timestamp datetime = Timestamp.valueOf("2024-05-17 14:23:48");
         Event event = new Event(100, datetime, "B", 1, "B", 1);
         when(eventRepository.getEventByDateTime(datetime)).thenReturn(event);
         Event result = eventRepository.getEventByDateTime(datetime);
         assertEquals(datetime, result.getDatetime());
     }
-
-    // U
-
     @Test
-    public void testUpdateEvent() throws SQLException{
+    public void testUpdateEvent_Success() throws SQLException{
         when(eventRepository.updateEvent(any(Event.class))).thenReturn(true);
         EventService eventService = new EventService(eventRepository);
-        boolean result = eventService.updateEvent(new Event(100, Timestamp.from(Instant.now()), "TEST", 1, "TEST", 1));
-        assertEquals(result, true);
+        boolean result = eventService.updateEvent(new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1));
+        assertTrue(result);
     }
-
-    // D
-
     @Test
-    public void testDeleteEvent() throws SQLException{
+    public void testUpdateEvent_Failure() throws SQLException{
+        when(eventRepository.updateEvent(any(Event.class))).thenReturn(false);
+        EventService eventService = new EventService(eventRepository);
+        boolean result = eventService.updateEvent(new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", 1));
+        assertFalse(result);
+    }
+    @Test
+    public void testDeleteEvent_Success() throws SQLException{
         int id = 1;
         when(eventRepository.deleteEvent(id)).thenReturn(true);
         EventService eventService = new EventService(eventRepository);
         boolean result = eventService.deleteEvent(id);
-        assertEquals(result, true);
+        assertTrue(result);
     }
-
+    @Test
+    public void testDeleteEvent_Failure() throws SQLException{
+        int id = 1;
+        when(eventRepository.deleteEvent(id)).thenReturn(false);
+        EventService eventService = new EventService(eventRepository);
+        boolean result = eventService.deleteEvent(id);
+        assertFalse(result);
+    }
 }

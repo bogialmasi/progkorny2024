@@ -1,5 +1,6 @@
 package org.nye.progkorny.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -12,30 +13,34 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-
+    private UserService userService;
     @Mock
     private UserRepository userRepository;
-
-    // C
-
+    @BeforeEach
+    public void setUp(){
+        userService = new UserService(userRepository);
+    }
     @Test
-    public void testInsertUser() throws SQLException {
+    public void testInsertUser_Success() throws SQLException {
         User user = new User(100, "TESTSUBJECT");
         when(userRepository.insertUser(user)).thenReturn(true);
-        UserService userService = new UserService(userRepository);
         boolean result = userService.addUser(user);
-        assertTrue(result);
         verify(userRepository, times(1)).insertUser(user);
+        assertTrue(result);
     }
-
-    // R
-
+    @Test
+    public void testInsertUser_Failure() throws SQLException {
+        User user = new User(100, "TESTSUBJECT");
+        when(userRepository.insertUser(user)).thenReturn(false);
+        boolean result = userService.addUser(user);
+        verify(userRepository, times(1)).insertUser(user);
+        assertFalse(result);
+    }
     @Test
     public void testGetAllUser() throws SQLException {
         List<User> users = Arrays.asList(
@@ -43,7 +48,6 @@ public class UserServiceTest {
                 new User(100, "TESTSUBJECT")
         );
         when(userRepository.getAllUser()).thenReturn(users);
-        UserService userService = new UserService(userRepository);
         List<User> result = userService.getAllUser();
         assertEquals(users.size(), result.size());
     }
@@ -53,7 +57,6 @@ public class UserServiceTest {
         int id = 1;
         User user = new User(id, "TESTSUBJECT");
         when(userRepository.getUserById(id)).thenReturn(user);
-        UserService userService = new UserService(userRepository);
         User result = userService.getUserById(id);
         assertEquals(id, result.getId());
     }
@@ -66,24 +69,35 @@ public class UserServiceTest {
         User result = userRepository.getUserByName(name);
         assertEquals(name, result.getName());
     }
-
-    // U
     @Test
-    public void testUpdateUser() throws SQLException{
+    public void testUpdateUser_Success() throws SQLException{
         when(userRepository.updateUser(any(User.class))).thenReturn(true);
         UserService userService = new UserService(userRepository);
         boolean result = userService.updateUser(new User(1, "TESTSUBJECT"));
-        assertEquals(result, true);
+        assertTrue(result);
     }
-
-    // D
     @Test
-    public void testDeleteUser() throws SQLException{
+    public void testUpdateUser_Failure() throws SQLException{
+        when(userRepository.updateUser(any(User.class))).thenReturn(false);
+        UserService userService = new UserService(userRepository);
+        boolean result = userService.updateUser(new User(1, "TESTSUBJECT"));
+        assertFalse(result);
+    }
+    @Test
+    public void testDeleteUser_Success() throws SQLException{
         int id = 1;
         when(userRepository.deleteUser(id)).thenReturn(true);
         UserService userService = new UserService(userRepository);
         boolean result = userService.deleteUser(id);
-        assertEquals(result, true);
+        assertTrue(result);
+    }
+    @Test
+    public void testDeleteUser_Failure() throws SQLException{
+        int id = 1;
+        when(userRepository.deleteUser(id)).thenReturn(false);
+        UserService userService = new UserService(userRepository);
+        boolean result = userService.deleteUser(id);
+        assertFalse(result);
     }
 
 }
