@@ -6,9 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.nye.progkorny.model.User;
+import org.nye.progkorny.repository.impl.DriverManagerFactory;
+import org.nye.progkorny.repository.impl.GenericDataAccess;
 import org.nye.progkorny.repository.impl.UserRepository;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,96 +23,128 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryTest {
 
+
     @Mock
+    DriverManagerFactory driverManagerFactory;
+
+    @Mock
+    Connection connection;
+
+    @Mock
+    Statement statement;
+
+    @Mock
+    ResultSet resultSet;
+
     UserRepository userRepository;
     private User user;
     @BeforeEach
-    public void setUp(){
+    public void setUp() throws SQLException {
+        userRepository = new UserRepository(new GenericDataAccess(driverManagerFactory));
         user = new User(100, "B");
+
+        when(driverManagerFactory.getConnection()).thenReturn(connection);
+        when(connection.createStatement()).thenReturn(statement);
     }
 
-    // C
     @Test
     public void testInsertUser_Successful() throws SQLException {
-        when(userRepository.insertUser(user)).thenReturn(true);
+        when(statement.executeUpdate(anyString())).thenReturn(1);
         assertTrue(userRepository.insertUser(user));
-        verify(userRepository, times(1)).insertUser(user);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verify(driverManagerFactory, times(1)).getConnection();
+        verify(connection, times(1)).createStatement();
     }
 
     @Test
     public void testInsertUser_Failure() throws SQLException {
-        when(userRepository.insertUser(user)).thenReturn(false);
-        assertFalse(userRepository.insertUser(user));
-        verify(userRepository, times(1)).insertUser(user);
+        when(statement.executeUpdate(anyString())).thenReturn(0);
+        boolean result = userRepository.insertUser(user);
+        assertFalse(result);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verifyConnectionSteps();
     }
-
-    // R
     @Test
     public void testGetAllUser() throws SQLException{
-        List<User> expectedUsers = new ArrayList<>();
-        expectedUsers.add(user);
-        when(userRepository.getAllUser()).thenReturn(expectedUsers);
-        List<User> actualUsers = userRepository.getAllUser();
-        assertEquals(expectedUsers, actualUsers);
-        verify(userRepository, times(1)).getAllUser();
+       setupUserMap();
+       when(statement.executeQuery(anyString())).thenReturn(resultSet);
+       List<User> expectedUsers = new ArrayList<>();
+       expectedUsers.add(user);
+       List<User> actualUsers = userRepository.getAllUser();
+       assertEquals(expectedUsers, actualUsers);
+       verify(statement, times(1)).executeQuery(anyString());
+       verifyConnectionSteps();
     }
 
     @Test
     public void testGetUserById() throws SQLException {
         int id = user.getId();
-        when(userRepository.getUserById(id)).thenReturn(user);
+        setupUserMap();
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
         User actualUser = userRepository.getUserById(id);
         assertEquals(user, actualUser);
-        verify(userRepository, times(1)).getUserById(id);
+        verify(statement, times(1)).executeQuery(anyString());
+        verifyConnectionSteps();
     }
 
     @Test
     public void testGetUserByName() throws SQLException {
         String name = user.getName();
-        when(userRepository.getUserByName(name)).thenReturn(user);
+        setupUserMap();
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
         User actualUser = userRepository.getUserByName(name);
         assertEquals(user, actualUser);
-        verify(userRepository, times(1)).getUserByName(name);
+        verify(statement, times(1)).executeQuery(anyString());
+        verifyConnectionSteps();
     }
-
-    // U
-
     @Test
     public void testUpdateUser_Successful() throws SQLException {
-        UserRepository userRepository = mock(UserRepository.class);
         User user = new User(200, "BC");
-        when(userRepository.updateUser(user)).thenReturn(true);
-        assertTrue(userRepository.updateUser(user));
-        verify(userRepository, times(1)).updateUser(user);
+        when(statement.executeUpdate(anyString())).thenReturn(1);
+        boolean result = userRepository.updateUser(user);
+        assertTrue(result);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verifyConnectionSteps();
     }
 
     @Test
     public void testUpdateUser_Failure() throws SQLException {
-        UserRepository userRepository = mock(UserRepository.class);
         User user = new User(200, "BC");
-        when(userRepository.updateUser(user)).thenReturn(false);
-        assertFalse(userRepository.updateUser(user));
-        verify(userRepository, times(1)).updateUser(user);
+        when(statement.executeUpdate(anyString())).thenReturn(0);
+        boolean result = userRepository.updateUser(user);
+        assertFalse(result);
+        verify(statement, times(1)).executeUpdate(anyString());
+        verifyConnectionSteps();
     }
-
-    // D
-
     @Test
     public void testDeleteUser_Successful() throws SQLException {
-        UserRepository userRepository = mock(UserRepository.class);
         int id = 1;
-        when(userRepository.deleteUser(id)).thenReturn(true);
-        assertTrue(userRepository.deleteUser(id));
-        verify(userRepository, times(1)).deleteUser(id);
+        when(statement.execute(anyString())).thenReturn(true);
+        boolean result = userRepository.deleteUser(id);
+        assertFalse(result);
+        verify(statement, times(1)).execute(anyString());
+        verifyConnectionSteps();
     }
 
     @Test
     public void testDeleteUser_Failure() throws SQLException {
-        UserRepository userRepository = mock(UserRepository.class);
         int id = 1;
-        when(userRepository.deleteUser(id)).thenReturn(false);
-        assertFalse(userRepository.deleteUser(id));
-        verify(userRepository, times(1)).deleteUser(id);
+        when(statement.execute(anyString())).thenReturn(false);
+        boolean result = userRepository.deleteUser(id);
+        assertTrue(result);
+        verify(statement, times(1)).execute(anyString());
+        verifyConnectionSteps();
+    }
+
+    private void verifyConnectionSteps() throws SQLException {
+        verify(driverManagerFactory, times(1)).getConnection();
+        verify(connection, times(1)).createStatement();
+    }
+
+    private void setupUserMap() throws SQLException {
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        when(resultSet.getInt(1)).thenReturn(user.getId());
+        when(resultSet.getString(2)).thenReturn(user.getName());
     }
 
 }

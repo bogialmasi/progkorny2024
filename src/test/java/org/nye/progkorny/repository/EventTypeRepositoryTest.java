@@ -27,7 +27,7 @@ public class EventTypeRepositoryTest {
     DriverManagerFactory driverManagerFactory;
 
     @Mock
-    Connection conn;
+    Connection connection;
 
     @Mock
     Statement statement;
@@ -44,68 +44,44 @@ public class EventTypeRepositoryTest {
         eventType = new EventType(100, "B");
 
 
-        when(driverManagerFactory.getConnection()).thenReturn(conn);
-        when(conn.createStatement()).thenReturn(statement);
+        when(driverManagerFactory.getConnection()).thenReturn(connection);
+        when(connection.createStatement()).thenReturn(statement);
     }
-
-    // C
     @Test
     public void testInsertEventType_Successful() throws SQLException {
         when(statement.executeUpdate(anyString())).thenReturn(1);
         assertTrue(eventTypeRepository.insertEventType(eventType));
         verify(statement, times(1)).executeUpdate(anyString());
         verify(driverManagerFactory, times(1)).getConnection();
-        verify(conn, times(1)).createStatement();
+        verify(connection, times(1)).createStatement();
 
     }
-
     @Test
     public void testInsertEventType_Failure() throws SQLException {
-        //arrange
         when(statement.executeUpdate(anyString())).thenReturn(0);
-
-        //act
         boolean result = eventTypeRepository.insertEventType(eventType);
-
-        //assert
         assertFalse(result);
         verify(statement, times(1)).executeUpdate(anyString());
         verifyConnectionSteps();
     }
-
-
-    // R
     @Test
     public void testGetAllEventType() throws SQLException {
-        //arrange
         setupEventTypeMap();
         when(statement.executeQuery(anyString())).thenReturn(resultSet);
         List<EventType> expectedEventTypes = new ArrayList<>();
         expectedEventTypes.add(eventType);
-
-        //act
         List<EventType> actualEventTypes = eventTypeRepository.getAllEventType();
-
-        //assert
         assertEquals(expectedEventTypes, actualEventTypes);
         verify(statement, times(1)).executeQuery(anyString());
         verifyConnectionSteps();
 
     }
-
-
-
     @Test
     public void testGetEventTypeById() throws SQLException {
-        //arrange
         int id = eventType.getId();
         setupEventTypeMap();
         when(statement.executeQuery(anyString())).thenReturn(resultSet);
-
-        //act
         EventType actualEventType = eventTypeRepository.getEventTypeById(id);
-
-        //assert
         assertEquals(eventType, actualEventType);
         verify(statement, times(1)).executeQuery(anyString());
         verifyConnectionSteps();
@@ -114,31 +90,19 @@ public class EventTypeRepositoryTest {
 
     @Test
     public void testGetEventTypeByName() throws SQLException {
-        //arrange
         String name = eventType.getName();
         setupEventTypeMap();
         when(statement.executeQuery(anyString())).thenReturn(resultSet);
-
-        //act
         EventType actualEventType = eventTypeRepository.getEventTypeByName(name);
-
-        //assert
         assertEquals(eventType, actualEventType);
         verify(statement, times(1)).executeQuery(anyString());
         verifyConnectionSteps();
     }
-
-    // U
-
     @Test
     public void testUpdateEventType_Successful() throws SQLException {
-        //arrange
         EventType eventType = new EventType(200, "BC");
         when(statement.executeUpdate(anyString())).thenReturn(1);
-
-        //act
-        var result = eventTypeRepository.updateEventType(eventType);
-
+        boolean result = eventTypeRepository.updateEventType(eventType);
         assertTrue(result);
         verify(statement, times(1)).executeUpdate(anyString());
         verifyConnectionSteps();
@@ -146,30 +110,18 @@ public class EventTypeRepositoryTest {
 
     @Test
     public void testUpdateEventType_Failure() throws SQLException {
-        //arrange
         EventType eventType = new EventType(200, "BC");
         when(statement.executeUpdate(anyString())).thenReturn(0);
-
-        //act
         boolean result = eventTypeRepository.updateEventType(eventType);
-
         assertFalse(result);
         verify(statement, times(1)).executeUpdate(anyString());
         verifyConnectionSteps();
     }
-
-    // D
-
     @Test
     public void testDeleteEventType_Successful() throws SQLException {
-        //arrange
         int id = 1;
         when(statement.execute(anyString())).thenReturn(true);
-
-        //act
         boolean result = eventTypeRepository.deleteEventType(id);
-
-        //assert
         assertFalse(result);
         verify(statement, times(1)).execute(anyString());
         verifyConnectionSteps();
@@ -177,14 +129,9 @@ public class EventTypeRepositoryTest {
 
     @Test
     public void testDeleteEventType_Failure() throws SQLException {
-        //arrange
         int id = 1;
         when(statement.execute(anyString())).thenReturn(false);
-
-        //act
         boolean result = eventTypeRepository.deleteEventType(id);
-
-        //assert
         assertTrue(result);
         verify(statement, times(1)).execute(anyString());
         verifyConnectionSteps();
@@ -192,7 +139,7 @@ public class EventTypeRepositoryTest {
 
     private void verifyConnectionSteps() throws SQLException {
         verify(driverManagerFactory, times(1)).getConnection();
-        verify(conn, times(1)).createStatement();
+        verify(connection, times(1)).createStatement();
     }
 
     private void setupEventTypeMap() throws SQLException {
