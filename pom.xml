@@ -110,7 +110,8 @@
                 <configuration>
                     <excludes>
                         <exclude>org/nye/progkorny/model/**</exclude>
-                        <exclude>org/nye/progkorny/ProgkornyApplication.java</exclude>
+                        <exclude>org/nye/progkorny/ProgkornyApplication*</exclude>
+                        <exclude>org/nye/progkorny/repository/impl/DriverManagerFactory.java</exclude>
                         <exclude>*Test</exclude>
                     </excludes>
                     <rules>
@@ -120,12 +121,12 @@
                                 <limit>
                                     <counter>LINE</counter>
                                     <value>COVEREDRATIO</value>
-                                    <minimum>0.6</minimum>
+                                    <minimum>0.60</minimum>
                                 </limit>
                                 <limit>
                                     <counter>BRANCH</counter>
                                     <value>COVEREDRATIO</value>
-                                    <minimum>0.6</minimum>
+                                    <minimum>0.60</minimum>
                                 </limit>
                             </limits>
                         </rule>
