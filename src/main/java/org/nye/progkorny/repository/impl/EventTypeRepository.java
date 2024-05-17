@@ -21,10 +21,11 @@ public class EventTypeRepository implements EventTypeRepositoryInterface {
     public EventTypeRepository(GenericDataAccessInterface dac) {
         this.dac = dac;
     }
+
     @Override
     public boolean insertEventType(EventType eventType) throws SQLException {
         int rowsAffected = dac.upsert("INSERT INTO eventtype " +
-                "(name) VALUES('" + eventType.getName()+ "');");
+                "(name) VALUES('" + eventType.getName() + "');");
         return rowsAffected == 1;
     }
 

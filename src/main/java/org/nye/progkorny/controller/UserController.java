@@ -20,7 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // C
     @PostMapping(path = "/")
     public ResponseEntity<Void> insertUser(@RequestBody User user) throws SQLException {
         boolean result = userService.addUser(user);
@@ -29,8 +28,6 @@ public class UserController {
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
-
-    // R
 
     @GetMapping(path = "/")
     public List<User> getAllUser() throws SQLException {
@@ -47,24 +44,20 @@ public class UserController {
         return userService.getUserByName(name);
     }
 
-    // U
-
     @PutMapping(path = "/", params = "id")
     public ResponseEntity<Void> updateUser(@RequestBody User newUser, @RequestParam int id) throws SQLException {
         User user = userService.getUserById(id);
         user.setName(newUser.getName());
-        if(userService.updateUser(user)){
+        if (userService.updateUser(user)) {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
 
-    // D
-
     @DeleteMapping(path = "/", params = "id")
     public ResponseEntity<Void> deleteUser(@RequestParam("id") int id) throws SQLException {
         boolean result = userService.deleteUser(id);
-        if(result){
+        if (result) {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);

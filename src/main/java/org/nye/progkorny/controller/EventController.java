@@ -21,7 +21,6 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    // C
     @PostMapping(path = "/")
     public ResponseEntity<Void> insertEvent(@RequestBody Event event) throws SQLException {
         boolean result = eventService.addEvent(event);
@@ -30,8 +29,6 @@ public class EventController {
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
-
-    // R
 
     @GetMapping(path = "/")
     public List<Event> getAllEvent() throws SQLException {
@@ -68,7 +65,6 @@ public class EventController {
         return eventService.getEventByDateTime(datetime);
     }
 
-    // U
     @PutMapping(path = "/", params = "id")
     public ResponseEntity<Void> updateEvent(@RequestBody Event newEvent, @RequestParam int id) throws SQLException {
         Event event = eventService.getEventById(id);
@@ -77,13 +73,12 @@ public class EventController {
         event.setEventTypeId(newEvent.getEventTypeId());
         event.setName(newEvent.getName());
         event.setUserId(newEvent.getUserId());
-        if(eventService.updateEvent(event)){
+        if (eventService.updateEvent(event)) {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
 
-    // D
     @DeleteMapping(path = "/", params = "id")
     public ResponseEntity<Void> deleteEvent(@RequestParam("id") int id) throws SQLException {
         boolean result = eventService.deleteEvent(id);

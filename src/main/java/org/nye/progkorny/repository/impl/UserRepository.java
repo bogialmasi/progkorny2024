@@ -1,6 +1,5 @@
 package org.nye.progkorny.repository.impl;
 
-import org.nye.progkorny.model.EventType;
 import org.nye.progkorny.model.User;
 import org.nye.progkorny.repository.GenericDataAccessInterface;
 import org.nye.progkorny.repository.UserRepositoryInterface;
@@ -22,16 +21,12 @@ public class UserRepository implements UserRepositoryInterface {
         this.dac = dac;
     }
 
-    // C
-
     @Override
     public boolean insertUser(User user) throws SQLException {
         int rowsAffected = dac.upsert("INSERT INTO user " +
-                "(name) VALUES ('" + user.getName()+ "');");
+                "(name) VALUES ('" + user.getName() + "');");
         return rowsAffected == 1;
     }
-
-    // R
 
     @Override
     public User getUserById(int id) throws SQLException {
@@ -51,15 +46,12 @@ public class UserRepository implements UserRepositoryInterface {
         return map(dac.query(sqlQuery));
     }
 
-    // U
-
     @Override
     public boolean updateUser(User user) throws SQLException {
-        int rowsAffected = dac.upsert("UPDATE user SET name = '" + user.getName() + "' WHERE id = " + user.getId()+ " ;");
+        int rowsAffected = dac.upsert("UPDATE user SET name = '" + user.getName() + "' WHERE id = " + user.getId() + " ;");
         return rowsAffected == 1;
     }
 
-    // D
     @Override
     public boolean deleteUser(int id) throws SQLException {
         String sqlQuery = String.format("DELETE FROM user WHERE id = %d", id);

@@ -1,14 +1,14 @@
 package org.nye.progkorny.repository.impl;
 
 import org.nye.progkorny.repository.DriverManagerFactoryInterface;
-import org.nye.progkorny.repository.EventRepositoryInterface;
 import org.nye.progkorny.repository.GenericDataAccessInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 @Component
 public class GenericDataAccess implements GenericDataAccessInterface {
@@ -26,27 +26,29 @@ public class GenericDataAccess implements GenericDataAccessInterface {
         resultSet = queryImpl(connection, sqlQuery);
         return resultSet;
     }
+
     private ResultSet queryImpl(Connection connection, String sqlQuery) throws SQLException {
         return createStatement(connection).executeQuery(sqlQuery);
     }
 
     public boolean delete(String sqlQuery) throws SQLException {
         Connection connection = driverManagerFactory.getConnection();
-        if(!deleteImpl(connection, sqlQuery)){
+        if (!deleteImpl(connection, sqlQuery)) {
             return true;
         }
 
         return false;
     }
+
     private boolean deleteImpl(Connection connection, String sqlQuery) throws SQLException {
         return createStatement(connection).execute(sqlQuery);
-        // execute() returns false if no results
     }
 
     public int upsert(String sqlQuery) throws SQLException {
         Connection connection = driverManagerFactory.getConnection();
         return upsertImpl(connection, sqlQuery);
     }
+
     private int upsertImpl(Connection connection, String sqlQuery) throws SQLException {
         return createStatement(connection).executeUpdate(sqlQuery);
     }

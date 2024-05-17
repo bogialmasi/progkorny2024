@@ -8,15 +8,23 @@ import java.util.List;
 
 public interface EventRepositoryInterface {
     List<Event> getAllEvent() throws SQLException;
+
     Event getEventById(int id) throws SQLException;
+
     Event getEventByName(String name) throws SQLException;
+
     Event getEventByLocation(String location) throws SQLException;
+
     Event getEventByDateTime(Timestamp datetime) throws SQLException;
+
     List<Event> getEventByEventTypeId(int id) throws SQLException;
+
     List<Event> getEventByUserId(int id) throws SQLException;
 
     boolean deleteEvent(int id) throws SQLException;
+
     boolean updateEvent(Event event) throws SQLException;
+
     boolean insertEvent(Event event) throws SQLException;
 
 }

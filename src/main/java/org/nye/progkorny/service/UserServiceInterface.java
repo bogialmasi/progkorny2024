@@ -6,14 +6,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserServiceInterface {
-    // C
     boolean addUser(User User) throws SQLException;
-    // R
+
     List<User> getAllUser() throws SQLException;
+
     User getUserById(int id) throws SQLException;
+
     User getUserByName(String name) throws SQLException;
-    // U
+
     boolean updateUser(User user) throws SQLException;
-    // D
+
     boolean deleteUser(int id) throws SQLException;
 }

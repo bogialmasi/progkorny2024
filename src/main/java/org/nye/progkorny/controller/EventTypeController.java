@@ -13,15 +13,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/eventtype")
 public class EventTypeController {
-
-        @Autowired
-        private EventTypeService eventTypeService;
+    @Autowired
+    private EventTypeService eventTypeService;
 
     public EventTypeController(EventTypeService eventTypeService) {
         this.eventTypeService = eventTypeService;
     }
 
-    // C
     @PostMapping(path = "/")
     public ResponseEntity<Void> insertEventType(@RequestBody EventType eventType) throws SQLException {
         boolean result = eventTypeService.addEventType(eventType);
@@ -30,8 +28,6 @@ public class EventTypeController {
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
-
-    // R
 
     @GetMapping(path = "/")
     public List<EventType> getAllEventType() throws SQLException {
@@ -48,18 +44,16 @@ public class EventTypeController {
         return eventTypeService.getEventTypeByName(name);
     }
 
-    // U
     @PutMapping(path = "/", params = "id")
     public ResponseEntity<Void> updateEventType(@RequestBody EventType newEventType, @RequestParam int id) throws SQLException {
         EventType eventType = eventTypeService.getEventTypeById(id);
         eventType.setName(newEventType.getName());
-        if(eventTypeService.updateEventType(eventType)){
+        if (eventTypeService.updateEventType(eventType)) {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
 
-    // D
     @DeleteMapping(path = "/", params = "id")
     public ResponseEntity<Void> deleteEventType(@RequestParam("id") int id) throws SQLException {
         boolean result = eventTypeService.deleteEventType(id);
@@ -68,5 +62,4 @@ public class EventTypeController {
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_MODIFIED);
     }
-
 }

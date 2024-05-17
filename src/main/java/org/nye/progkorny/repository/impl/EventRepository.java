@@ -23,16 +23,13 @@ public class EventRepository implements EventRepositoryInterface {
         this.dac = dac;
     }
 
-    // C
     @Override
     public boolean insertEvent(Event event) throws SQLException {
         int rowsAffected = dac.upsert("INSERT INTO event (datetime, location, eventtypeid, name, userid) VALUES('" +
-                event.getDatetime() +"', '" + event.getLocation() +"', '" + event.getEventTypeId() + "', '" +
-                event.getName() +"', '" + event.getUserId() + "');");
+                event.getDatetime() + "', '" + event.getLocation() + "', '" + event.getEventTypeId() + "', '" +
+                event.getName() + "', '" + event.getUserId() + "');");
         return rowsAffected == 1;
     }
-
-    // R
 
     @Override
     public List<Event> getAllEvent() throws SQLException {
@@ -76,8 +73,6 @@ public class EventRepository implements EventRepositoryInterface {
         return map(dac.query(sqlQuery));
     }
 
-    // U
-
     @Override
     public boolean updateEvent(Event event) throws SQLException {
         int rowsAffected = dac.upsert("UPDATE event " +
@@ -89,9 +84,6 @@ public class EventRepository implements EventRepositoryInterface {
                 " WHERE id = " + event.getId() + ";");
         return rowsAffected == 1;
     }
-
-
-    // D
 
     @Override
     public boolean deleteEvent(int id) throws SQLException {
@@ -111,7 +103,6 @@ public class EventRepository implements EventRepositoryInterface {
             int userId = resultSet.getInt(6);
             events.add(new Event(id, datetime, location, eventTypeID, name, userId));
         }
-
         return events;
     }
 }

@@ -1,7 +1,6 @@
 package org.nye.progkorny.service.impl;
 
 import org.nye.progkorny.model.EventType;
-import org.nye.progkorny.repository.EventRepositoryInterface;
 import org.nye.progkorny.repository.EventTypeRepositoryInterface;
 import org.nye.progkorny.service.EventTypeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
