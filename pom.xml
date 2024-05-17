@@ -80,6 +80,107 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!--
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>org/nye/progkorny/model/**</exclude>
+                        <exclude>org/nye/progkorny/ProgkornyApplication.java</exclude>
+                        <exclude>*Test</exclude>
+                    </excludes>
+                    <rules>
+                        <rule>
+                            <element>PACKAGE</element>
+                            <limits>
+                                <limit>
+                                    <counter>LINE</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>0.6</minimum>
+                                </limit>
+                                <limit>
+                                    <counter>BRANCH</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <minimum>0.6</minimum>
+                                </limit>
+                            </limits>
+                        </rule>
+                    </rules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+            -->
+<!--
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>3.2.1</version>
+            <dependencies>
+                <dependency>
+                    <groupId>com.puppycrawl.tools</groupId>
+                    <artifactId>checkstyle</artifactId>
+                    <version>10.9.3</version>
+                </dependency>
+            </dependencies>
+            <configuration>
+                <consoleOutput>true</consoleOutput>
+                <configLocation>google_checks.xml</configLocation>
+                <violationSeverity>warning</violationSeverity>
+                <violationIgnore>
+                    Indentation,
+                    CustomImportOrder,
+                    DesignForExtension,
+                    HiddenField,
+                    HideUtilityClassConstructor,
+                    JavadocPackage,
+                    JavadocVariable
+                </violationIgnore>
+                Exclude model classes and the entry point class.
+                <excludes>
+                    **/model/**/*,
+                    **/ProgkornyApplication.java
+                </excludes>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>check-google-checks</id>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        -->
+
         </plugins>
     </build>
 </project>

@@ -1,5 +1,6 @@
 package org.nye.progkorny.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,22 +20,24 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
+
+    private UserController userController;
     @Mock
     private UserService userService;
 
-    // C
+    @BeforeEach
+    public void setUp(){
+        userController = new UserController(userService);
+    }
 
     @Test
     public void testInsertUser() throws SQLException {
         User user = new User(100, "TESTSUBJECT");
         when(userService.addUser(user)).thenReturn(true);
-        UserController userController = new UserController(userService);
         ResponseEntity<Void> result = userController.insertUser(user);
         verify(userService, times(1)).addUser(user);
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
     }
-
-    // R
 
     @Test
     public void testGetAllUser() throws SQLException {
@@ -43,7 +46,6 @@ public class UserControllerTest {
                 new User(100, "TESTSUBJECT")
         );
         when(userService.getAllUser()).thenReturn(users);
-        UserController userController = new UserController(userService);
         List<User> result = userController.getAllUser();
         assertEquals(users.size(), result.size());
     }
@@ -53,7 +55,6 @@ public class UserControllerTest {
         int id = 1;
         User user = new User(id, "TESTSUBJECT");
         when(userService.getUserById(id)).thenReturn(user);
-        UserController userController = new UserController(userService);
         User result = userController.getUserById(id);
         assertEquals(id, result.getId());
     }
@@ -63,12 +64,10 @@ public class UserControllerTest {
         String name = "B";
         User user = new User(1, name);
         when(userService.getUserByName(name)).thenReturn(user);
-        UserController userController = new UserController(userService);
         User result = userController.getUserByName(name);
         assertEquals(name, result.getName());
     }
 
-    // U
 
     @Test
     public void testUpdateUser() throws SQLException{
@@ -76,8 +75,6 @@ public class UserControllerTest {
         boolean result = userService.updateUser(new User(100, "TESTSUBJECT"));
         assertTrue(result);
     }
-
-    // D
 
     @Test
     public void testDeleteUser() throws SQLException{
