@@ -15,6 +15,11 @@ public class EventTypeService implements EventTypeServiceInterface {
     @Autowired
     EventTypeRepositoryInterface eventTypeRepository;
 
+
+    public boolean addEventType(EventType eventType) throws SQLException {
+        return eventTypeRepository.insertEventType(eventType);
+    }
+
     public EventTypeService(EventTypeRepositoryInterface eventTypeRepository) {
         this.eventTypeRepository = eventTypeRepository;
     }
@@ -29,9 +34,6 @@ public class EventTypeService implements EventTypeServiceInterface {
         return eventTypeRepository.getEventTypeByName(name);
     }
 
-    public boolean addEventType(EventType eventType) throws SQLException {
-        return eventTypeRepository.insertEventType(eventType);
-    }
 
     public EventType getEventTypeById(int id) throws SQLException {
         return eventTypeRepository.getEventTypeById(id);

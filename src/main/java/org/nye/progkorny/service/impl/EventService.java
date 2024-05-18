@@ -32,13 +32,11 @@ public class EventService implements EventServiceInterface {
 
     @Override
     public Event getEventById(int id) throws SQLException {
-
         return eventRepository.getEventById(id);
     }
 
     @Override
     public List<Event> getEventByEventTypeId(int id) throws SQLException {
-
         return eventRepository.getEventByEventTypeId(id);
     }
 
