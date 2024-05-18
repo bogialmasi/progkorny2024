@@ -66,20 +66,18 @@ public class UserServiceTest {
         String name = "B";
         User user = new User(1, name);
         when(userRepository.getUserByName(name)).thenReturn(user);
-        User result = userRepository.getUserByName(name);
+        User result = userService.getUserByName(name);
         assertEquals(name, result.getName());
     }
     @Test
     public void testUpdateUser_Success() throws SQLException{
         when(userRepository.updateUser(any(User.class))).thenReturn(true);
-        UserService userService = new UserService(userRepository);
         boolean result = userService.updateUser(new User(1, "TESTSUBJECT"));
         assertTrue(result);
     }
     @Test
     public void testUpdateUser_Failure() throws SQLException{
         when(userRepository.updateUser(any(User.class))).thenReturn(false);
-        UserService userService = new UserService(userRepository);
         boolean result = userService.updateUser(new User(1, "TESTSUBJECT"));
         assertFalse(result);
     }
@@ -87,7 +85,6 @@ public class UserServiceTest {
     public void testDeleteUser_Success() throws SQLException{
         int id = 1;
         when(userRepository.deleteUser(id)).thenReturn(true);
-        UserService userService = new UserService(userRepository);
         boolean result = userService.deleteUser(id);
         assertTrue(result);
     }
@@ -95,7 +92,6 @@ public class UserServiceTest {
     public void testDeleteUser_Failure() throws SQLException{
         int id = 1;
         when(userRepository.deleteUser(id)).thenReturn(false);
-        UserService userService = new UserService(userRepository);
         boolean result = userService.deleteUser(id);
         assertFalse(result);
     }

@@ -51,7 +51,7 @@ public class EventServiceTest {
         );
         when(eventRepository.getAllEvent()).thenReturn(events);
         List<Event> result = eventService.getAllEvent();
-        assertEquals(events.size(), result.size());
+        assertEquals(events.get(0).getId(), result.get(0).getId());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class EventServiceTest {
                 new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, "TEST", userId)
         );
         when(eventRepository.getEventByUserId(userId)).thenReturn(events);
-        List<Event> result = eventRepository.getEventByUserId(userId);
+        List<Event> result = eventService.getEventByUserId(userId);
         assertEquals(result.size(),2);
     }
     @Test
@@ -82,7 +82,7 @@ public class EventServiceTest {
                 new Event(200, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", eventTypeId, "TEST", 1)
         );
         when(eventRepository.getEventByEventTypeId(eventTypeId)).thenReturn(events);
-        List<Event> result = eventRepository.getEventByEventTypeId(eventTypeId);
+        List<Event> result = eventService.getEventByEventTypeId(eventTypeId);
         assertEquals(result.size(),2);
     }
 
@@ -91,7 +91,7 @@ public class EventServiceTest {
         String name = "B";
         Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), "TEST", 1, name, 1);
         when(eventRepository.getEventByName(name)).thenReturn(event);
-        Event result = eventRepository.getEventByName(name);
+        Event result = eventService.getEventByName(name);
         assertEquals(name, result.getName());
     }
     @Test
@@ -99,7 +99,7 @@ public class EventServiceTest {
         String location = "B";
         Event event = new Event(100, Timestamp.valueOf("2024-05-17 14:23:48"), location, 1, "B", 1);
         when(eventRepository.getEventByLocation(location)).thenReturn(event);
-        Event result = eventRepository.getEventByLocation(location);
+        Event result = eventService.getEventByLocation(location);
         assertEquals(location, result.getLocation());
     }
 
@@ -108,7 +108,7 @@ public class EventServiceTest {
         Timestamp datetime = Timestamp.valueOf("2024-05-17 14:23:48");
         Event event = new Event(100, datetime, "B", 1, "B", 1);
         when(eventRepository.getEventByDateTime(datetime)).thenReturn(event);
-        Event result = eventRepository.getEventByDateTime(datetime);
+        Event result = eventService.getEventByDateTime(datetime);
         assertEquals(datetime, result.getDatetime());
     }
     @Test

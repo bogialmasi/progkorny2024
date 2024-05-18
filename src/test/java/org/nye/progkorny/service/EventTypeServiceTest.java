@@ -69,20 +69,18 @@ public class EventTypeServiceTest {
         String name = "B";
         EventType eventType = new EventType(1, name);
         when(eventTypeRepository.getEventTypeByName(name)).thenReturn(eventType);
-        EventType result = eventTypeRepository.getEventTypeByName(name);
+        EventType result = eventTypeService.getEventTypeByName(name);
         assertEquals(name, result.getName());
     }
     @Test
     public void testUpdateEventType_Success() throws SQLException{
         when(eventTypeRepository.updateEventType(any(EventType.class))).thenReturn(true);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         boolean result = eventTypeService.updateEventType(new EventType(1, "TESTSUBJECT"));
         assertTrue(result);
     }
     @Test
     public void testUpdateEventType_Failure() throws SQLException{
         when(eventTypeRepository.updateEventType(any(EventType.class))).thenReturn(false);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         boolean result = eventTypeService.updateEventType(new EventType(1, "TESTSUBJECT"));
         assertFalse(result);
     }
@@ -90,7 +88,6 @@ public class EventTypeServiceTest {
     public void testDeleteEventType_Success() throws SQLException{
         int id = 1;
         when(eventTypeRepository.deleteEventType(id)).thenReturn(true);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         boolean result = eventTypeService.deleteEventType(id);
         assertTrue(result);
     }
@@ -98,7 +95,6 @@ public class EventTypeServiceTest {
     public void testDeleteEventType_Failure() throws SQLException{
         int id = 1;
         when(eventTypeRepository.deleteEventType(id)).thenReturn(false);
-        EventTypeService eventTypeService = new EventTypeService(eventTypeRepository);
         boolean result = eventTypeService.deleteEventType(id);
         assertFalse(result);
     }
